@@ -58,36 +58,36 @@
 <h3 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h3>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//assamble</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="built_in">string</span> p = <span class="string">"12345678"</span>;</span><br><span class="line">    <span class="comment">//c_str输出</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * c1 = p.c_str();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d--&gt;%s\n"</span>, __LINE__, c1);</span><br><span class="line">    <span class="comment">//data输出</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * c2 = p.data();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d--&gt;%s\n"</span>, __LINE__, c2);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="编译"><a class="markdownIt-Anchor" href="#编译"></a> 编译</h3>
-<p><img src="http://119.29.144.44/down/image/blog/stringStrAndData/1.png" alt="编译"></p>
+<p><img src="1.png" alt="编译"></p>
 <h3 id="上ida"><a class="markdownIt-Anchor" href="#上ida"></a> 上IDA</h3>
 <p>选择加载64位PC程序后，结果出来了~<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/2.png" alt="结果"><br>
+<img src="2.png" alt="结果"><br>
 可以看到程序调用了系统的函数<code>c_str()</code>和<code>data()</code>。<br>
 可是呢？我们并不知道系统函数做了什么，编译器到底是怎么实现这两个函数的？<br>
 我们可以动态调试，康康到底执行了那些命令吧~</p>
 <h3 id="上x64dbg"><a class="markdownIt-Anchor" href="#上x64dbg"></a> 上x64dbg</h3>
 <p>程序跑起来后，停在了程序的<code>EntryPoint</code>。此时，代码控制权在系统领空。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/3.png" alt="程序入口"><br>
+<img src="3.png" alt="程序入口"><br>
 先不管那么多，先跑完一次性断点。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/4.png" alt="~"><br>
+<img src="4.png" alt="~"><br>
 跑完后，我们可以看到，程序已经跑到了程序领空。然后我们继续一路F8，直到找到我们写的<code>getchar</code>。<br>
 F8到最后，卡到了一个指令不能往下跑了。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/5.png" alt="到getchar()里面了"><br>
+<img src="5.png" alt="到getchar()里面了"><br>
 因为程序跑到了<code>getchar()</code>里面了，等待用户输入。<br>
 我们随便输入一些东西后回车继续跑~<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/6.png" alt="回车后"><br>
+<img src="6.png" alt="回车后"><br>
 我们回车后，程序跳到了<code>syscall</code>后面，接着是<code>ret</code>返回。说明我们即将跳出<code>getchar()</code>了，我们继续跟进F8。<br>
 F8过程中，可以看到调用了<code>ReadFile()</code>~<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/7.png" alt="ReadFile()"><br>
+<img src="7.png" alt="ReadFile()"><br>
 继续F8康康。最后，千辛万苦找到了<code>getchar()</code>,同时，我们看到了期待已久的call:<code>c_str()</code>和<code>data()</code>。跟IDA看到的一模一样。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/8.png" alt="找到了！"><br>
+<img src="8.png" alt="找到了！"><br>
 我们记录一下当前的内存地址：00000000004015FC，然后我们F7进去康康系统到底执行了什么？跳到了0000000000401748。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/9.png" alt="接口"><br>
+<img src="9.png" alt="接口"><br>
 这里看上去，像是一个集中跳转的地方，类似于接口，应用程序通过这里集中调用系统函数或者动态链接库。我们跳过去看看~<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/10.png" alt="c_str()"><br>
+<img src="10.png" alt="c_str()"><br>
 跳到了000000006FC6E550<br>
 无语了…就执行了一句<code>mov rax,qword ptr ds:[rcx]</code>就返回。继续F7看看下面的data看看。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/11.png" alt="data()"><br>
+<img src="11.png" alt="data()"><br>
 从0000000000401624到0000000000401750到000000006FC6E3B0<br>
 发现也是同样一句<code>mov rax,qword ptr ds:[rcx]</code>然后就<code>ret</code>。</p>
 <p>这不是都一样的吗？？？</p>
@@ -98,41 +98,41 @@ F8过程中，可以看到调用了<code>ReadFile()</code>~<br>
 而值就是我们string对应的字符串。<br>
 通俗来讲：就是string里面有个指针指向保存着数据的<code>char[]</code>，默认是隐藏的，函数执行了一个根据指针取出字符串的操作。<br>
 翻译成C/C++就是<code>&amp;&quot;12345678&quot;</code>。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/12.png" alt="rax,rcx"></p>
+<img src="12.png" alt="rax,rcx"></p>
 <h2 id="优化"><a class="markdownIt-Anchor" href="#优化"></a> 优化</h2>
 <p>在跟进的过程中，我们发现了一个问题：<code>c_str()</code>和<code>data()</code>都是跳转了2次最终执行了相同的指令。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/13.png" alt="jmp"><br>
+<img src="13.png" alt="jmp"><br>
 我们是不是可以直接把指令复制过去执行，而省去了跳转的麻烦。<br>
 修改汇编代码，直接将两个地方的call改成我们最终执行的指令，多余的字节以nop填充。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/14.png" alt="修改"><br>
+<img src="14.png" alt="修改"><br>
 打补丁，修改补丁。保存，重新运行~<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/15.png" alt="成功~"><br>
+<img src="15.png" alt="成功~"><br>
 完美运行。我们把6条指令优化成2条指令!将程序运行时间缩短了40纳秒。😂</p>
 <h2 id="微软的cl编译器呢"><a class="markdownIt-Anchor" href="#微软的cl编译器呢"></a> 微软的CL编译器呢？</h2>
 <h3 id="编译-2"><a class="markdownIt-Anchor" href="#编译-2"></a> 编译</h3>
 <p>同样，我们先编译。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/16.png" alt="编译"></p>
+<img src="16.png" alt="编译"></p>
 <h3 id="上ida-2"><a class="markdownIt-Anchor" href="#上ida-2"></a> 上IDA</h3>
 <p>上IDA我们发现程序的流程有点乱，这得益于vs2017蜜汁优化。甚至编译后连函数的字符都没有保留。什么东西都看不出来个所以然。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/17.png" alt="IDA结果"></p>
+<img src="17.png" alt="IDA结果"></p>
 <h3 id="上x64dbg-2"><a class="markdownIt-Anchor" href="#上x64dbg-2"></a> 上x64dbg</h3>
 <p>直接上x64dbg吧。(才发现编译出来的是32位的程序)<br>
 国际惯例跑完所有一次性断点，到达程序入口点。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/18.png" alt="程序入口点"><br>
+<img src="18.png" alt="程序入口点"><br>
 直接运行到<code>getchar()</code>,然后暂停程序。输入一个字符回车。程序暂停在<code>call edx</code>后，接下来是<code>ret</code>。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/19.png" alt="回车后"><br>
+<img src="19.png" alt="回车后"><br>
 接下来同样看到ReadFile()<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/20.png" alt="ReadFile()"><br>
+<img src="20.png" alt="ReadFile()"><br>
 继续F8康康。最后，千辛万苦找到了熟悉的字眼<code>&quot;%d--&gt;%s\n&quot;</code>。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/21.png" alt="熟悉的字眼"><br>
+<img src="21.png" alt="熟悉的字眼"><br>
 这是我们程序硬编码上去的,编译器无法修改的字符串。<br>
 但是由于编译器编译同时，优化删除掉对分析程序有用的信息(函数符号)所以我们并没有看到类似的<code>c_str()</code>和<code>data()</code>。<br>
 所以，我们可以根据以往的经验，来猜测每个call的作用。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/22.png" alt="猜测"><br>
+<img src="22.png" alt="猜测"><br>
 经过猜测分析，我们同样也很容易看到，两个函数都是<code>call assamble.4818C0</code>,说明调用的是同一个函数。<br>
 居然优化了两个函数，不再各自调用自己的函数！此处应有掌声！👏👏👏微软牛逼！<br>
 不过，我比较好奇的是，里面不再是只有一条指令了。我们进入里面康康内部是怎么实现的。<br>
-<img src="http://119.29.144.44/down/image/blog/stringStrAndData/23.png" alt="函数内部"><br>
+<img src="23.png" alt="函数内部"><br>
 就是这样实现的！具体是怎样的呢？等我学完汇编再康康吧~</p>
 <h2 id="最终结论"><a class="markdownIt-Anchor" href="#最终结论"></a> 最终结论</h2>
 <ol>

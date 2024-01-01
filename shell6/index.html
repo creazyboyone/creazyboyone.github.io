@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Shell学习（六）"><meta name="keywords" content="Shell,脚本"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>Shell学习（六） | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shell%E8%84%9A%E6%9C%AC%E5%BC%80%E5%8F%91%E4%B9%8B%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text"> shell脚本开发之文本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bash-%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">1.1.</span> <span class="toc-text"> bash 快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#regexp"><span class="toc-number">1.2.</span> <span class="toc-text"> RegExp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bre-%E9%9B%86%E5%90%88"><span class="toc-number">1.2.1.</span> <span class="toc-text"> BRE 集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ere-%E9%9B%86%E5%90%88"><span class="toc-number">1.2.2.</span> <span class="toc-text"> ERE 集合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grep"><span class="toc-number">1.3.</span> <span class="toc-text"> grep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed"><span class="toc-number">1.4.</span> <span class="toc-text"> sed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk"><span class="toc-number">1.5.</span> <span class="toc-text"> awk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 格式化输出</span></a></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Shell学习（六）</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-12-21</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/">技术栈</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E8%BF%90%E7%BB%B4/">运维</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="shell脚本开发之文本操作"><a class="markdownIt-Anchor" href="#shell脚本开发之文本操作"></a> shell脚本开发之文本操作</h1>
+<p>系列学完了，这是第二期。(其实应该这个先学的) <code>bash</code> 基础<br />
+接下来是有名的第三方工具 (正则表达式 awk sed grep等等)</p>
+<span id="more"></span>
+<h2 id="bash-快捷键"><a class="markdownIt-Anchor" href="#bash-快捷键"></a> bash 快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>英文</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + A</td>
+<td>ahead</td>
+<td>行首</td>
+</tr>
+<tr>
+<td>Ctrl + E</td>
+<td>end</td>
+<td>行尾</td>
+</tr>
+<tr>
+<td>Ctrl + U</td>
+<td></td>
+<td>删除光标之前的 <code>所有</code> 字符</td>
+</tr>
+<tr>
+<td>Ctrl + K</td>
+<td></td>
+<td>删除光标之后的 <code>所有</code> 字符</td>
+</tr>
+<tr>
+<td>Ctrl + L</td>
+<td>clear</td>
+<td>清空屏幕</td>
+</tr>
+<tr>
+<td>Tab</td>
+<td></td>
+<td>补全 <code>$PATH</code> 命令，补全文件名</td>
+</tr>
+</tbody>
+</table>
+<h2 id="regexp"><a class="markdownIt-Anchor" href="#regexp"></a> RegExp</h2>
+<p>正则表达式分两类：</p>
+<ul>
+<li>基本正则表达式，BRE对应的字符有：<code>^$.[]*</code></li>
+<li>扩展正则表达式，ERE在BRE基础上，加上：<code>()&#123;&#125;?+|</code> 等字符</li>
+</ul>
+<p>正则表达式仅支持 (sed, awk, grep)</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>grep</td>
+<td>文本过滤工具 (模式 pattern) 工具</td>
+</tr>
+<tr>
+<td>sed</td>
+<td>流编辑器 (stream editor) 文本编辑工具</td>
+</tr>
+<tr>
+<td>awk</td>
+<td>Linux 文本报告生成器 (格式化文本) gawk</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bre-集合"><a class="markdownIt-Anchor" href="#bre-集合"></a> BRE 集合</h3>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^</td>
+<td>尖角号，用于模式的最左侧 --&gt; <code>&quot;^yu&quot;</code> 匹配以 <code>yu</code> 单词开头的行</td>
+</tr>
+<tr>
+<td>$</td>
+<td>美元符，用于模式的最右侧 --&gt; <code>&quot;yu$&quot;</code> 匹配以 <code>yu</code> 单词结尾的行</td>
+</tr>
+<tr>
+<td>^$</td>
+<td>组合符，表示空行( <code>^</code> 后面什么也没写，为空。<code>$</code> 前面什么也没写，为空。开头结尾什么都没有)</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意一个且只有一个字符，不能匹配空行</td>
+</tr>
+<tr>
+<td>\</td>
+<td>转义字符，让特殊含义的字符，现出圆形，还原本意。例如 <code>\.</code> 代表小数点</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前一个字符（连续出现）0次或1次以上，重复0次代表空，即匹配所有内容 --&gt; <code>a*</code> 匹配 <code>a</code> 0次或多次</td>
+</tr>
+<tr>
+<td>.*</td>
+<td>组合符，匹配所有内容</td>
+</tr>
+<tr>
+<td>^.*</td>
+<td>组合符，匹配任意多个字符开头的内容</td>
+</tr>
+<tr>
+<td>.*$</td>
+<td>组合符，匹配以任意多个字符结尾的内容</td>
+</tr>
+<tr>
+<td>[abc]</td>
+<td>匹配 <code>[]</code> 集合内的任意一个字符，<code>a</code> 或 <code>b</code> 或 <code>c</code>，可以写成 <code>[a-c]</code></td>
+</tr>
+<tr>
+<td>[^abc]</td>
+<td>匹配除了 <code>^</code> 后面的任意字符，<code>a</code> 或 <code>b</code> 或 <code>c</code>，<code>^</code> 表示对 <code>[abc]</code> 的取反</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ere-集合"><a class="markdownIt-Anchor" href="#ere-集合"></a> ERE 集合</h3>
+<ul>
+<li>grep 命令需要使用参数 <code>-E</code> 才生效</li>
+<li>egrep 不推荐使用，用 <code>grep -E</code> 替代</li>
+<li>grep 不加参数，得在特殊字符前面加 <code>\</code> 反斜杠，识别为正则</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>匹配前一个字符1次或多次，前面字符至少出现1次</td>
+</tr>
+<tr>
+<td>[:/]+</td>
+<td>匹配括号内的 <code>:</code> 或者 <code>/</code> 字符1次或者多次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前一个字符0次或1次，前面字符可有可无</td>
+</tr>
+<tr>
+<td>|</td>
+<td>表示或者，同时过滤多个字符串</td>
+</tr>
+<tr>
+<td>()</td>
+<td>分组过滤，被括起来的内容表示一个整体</td>
+</tr>
+<tr>
+<td>a{n,m}</td>
+<td>匹配前一个字符最少n次，最多m次</td>
+</tr>
+<tr>
+<td>a{n,}</td>
+<td>匹配前一个字符最少n次</td>
+</tr>
+<tr>
+<td>a{n}</td>
+<td>匹配前一个字符正好n次</td>
+</tr>
+<tr>
+<td>a{,m}</td>
+<td>匹配前一个字符最多m次</td>
+</tr>
+</tbody>
+</table>
+<h2 id="grep"><a class="markdownIt-Anchor" href="#grep"></a> grep</h2>
+<p>全拼：Global search REgular expression and Print out the line</p>
+<p><strong>作用：文本搜索工具，根据用户指定得模式（过滤条件）对目标文本逐行进行匹配检查，打印匹配到的行</strong></p>
+<p><strong>模式：由正则表达式的元字符及文本字符所编写出的过滤条件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">grep [options] [pattern] file</span><br><span class="line">命令   参数     匹配模式   文件数据</span><br><span class="line">               -i:ignorecase,忽略大小写</span><br><span class="line">               -o:仅显示匹配到的字符本身</span><br><span class="line">               -v：--invert-match，显示不能被模式匹配到的行</span><br><span class="line">               -E：支持使用扩展的正则表达式元字符</span><br><span class="line">               -q：--quiet,--silent 静默模式，即不输出任何信息</span><br></pre></td></tr></table></figure>
+<p>grep命令是linux系统中最重要的命令之一，功能是从文本文件或管道数据流中筛选匹配的行和数据，如果再配合正则表达式，功能十分强大，是Linux运维人员必备的命令</p>
+<table>
+<thead>
+<tr>
+<th>参数选项</th>
+<th>解释说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-v</td>
+<td>排除匹配结果</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>显示匹配行与行号</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>不区分大小写</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>只统计匹配的行数</td>
+</tr>
+<tr>
+<td>-E</td>
+<td>使用egrep命令</td>
+</tr>
+<tr>
+<td>–color=auto</td>
+<td>为grep过滤结果添加颜色</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>只匹配过滤的单词</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>只输出匹配的内容</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd &gt; pwd.txt</span><br><span class="line">grep -i <span class="string">&quot;root&quot;</span> pwd.txt</span><br><span class="line">grep -i -n <span class="string">&quot;root&quot;</span> pwd.txt</span><br><span class="line">grep -i -c <span class="string">&quot;root&quot;</span> pwd.txt</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n\n&quot;</span> &gt;&gt; pwd.txt</span><br><span class="line">grep -i -n <span class="string">&quot;^$&quot;</span> pwd.txt</span><br><span class="line">grep -i -v <span class="string">&quot;^$&quot;</span> pwd.txt</span><br></pre></td></tr></table></figure>
+<p><img src="grep1.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">grep -i <span class="string">&quot;^s&quot;</span> pwd.txt</span><br><span class="line">grep -n <span class="string">&quot;bash$&quot;</span> pwd.txt</span><br><span class="line">grep -n <span class="string">&quot;bash$&quot;</span> pwd.txt -o</span><br><span class="line">grep -n <span class="string">&quot;.apt&quot;</span> pwd.txt</span><br><span class="line">grep -n <span class="string">&quot;.apt&quot;</span> pwd.txt --color=auto</span><br><span class="line"><span class="comment"># 后面为了方便直接 alias</span></span><br><span class="line"><span class="built_in">alias</span> grep=<span class="string">&#x27;grep --color=auto&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="grep2.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;[a-z]&quot;</span> /etc/lsb-release</span><br><span class="line">grep <span class="string">&quot;[A-Z]&quot;</span> /etc/lsb-release</span><br><span class="line">grep <span class="string">&quot;[0-9]&quot;</span> /etc/crontab</span><br><span class="line">grep <span class="string">&quot;[^a-zA-Z]&quot;</span> /etc/lsb-release</span><br></pre></td></tr></table></figure>
+<p><img src="grep3.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grep -E <span class="string">&quot;l+&quot;</span> /etc/lsb-release</span><br><span class="line">grep -E <span class="string">&quot;go?d&quot;</span> aa.txt</span><br><span class="line">find . -name <span class="string">&quot;*.txt&quot;</span> | grep -E <span class="string">&quot;a|w&quot;</span></span><br><span class="line">grep -E <span class="string">&quot;g(o|)d&quot;</span> aa.txt</span><br></pre></td></tr></table></figure>
+<p><img src="grep4.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">grep -E <span class="string">&quot;(r..t).*\1&quot;</span> /etc/passwd</span><br><span class="line">grep -E <span class="string">&quot;o&#123;1,4&#125;&quot;</span> aa.txt</span><br><span class="line">grep -E <span class="string">&quot;o&#123;5,&#125;&quot;</span> aa.txt</span><br><span class="line">grep -E <span class="string">&quot;o&#123;2&#125;&quot;</span> aa.txt -o</span><br><span class="line">grep -E <span class="string">&quot;o&#123;,4&#125;&quot;</span> aa.txt -o</span><br></pre></td></tr></table></figure>
+<p><img src="grep5.png" alt="" /></p>
+<h2 id="sed"><a class="markdownIt-Anchor" href="#sed"></a> sed</h2>
+<p>对文件，数据流进行处理，操作，过滤替换转换文本内容。</p>
+<p>工作流程：每次一行，放入模式空间(读入内存)，然后模式匹配，匹配成功，进行编辑，后输出屏幕，匹配失败输出屏幕。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 语法</span><br><span class="line">sed [选项] (sed 内置命令字符) [输入文件]</span><br></pre></td></tr></table></figure>
+<p>选项：</p>
+<table>
+<thead>
+<tr>
+<th>参数选项</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>取消默认 <code>sed</code> 输出，常与 <code>p</code> 命令一起用</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>直接将修改结果写入文件中，不加参数就是修改内存数据，输出</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>多次编辑，不需要管道符了</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>支持正则扩展</td>
+</tr>
+</tbody>
+</table>
+<p>常用的内置命令字符</p>
+<table>
+<thead>
+<tr>
+<th>sed 内置命令字符</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>append, 对文本追加，指定行后面添加一行/多行文本</td>
+</tr>
+<tr>
+<td>d</td>
+<td>Delete, 删除匹配行</td>
+</tr>
+<tr>
+<td>i</td>
+<td>insert, 表示插入文本，指定行前添加一行/多行文本</td>
+</tr>
+<tr>
+<td>p</td>
+<td>Print,  打印匹配行内容，与 <code>-n</code> 一起使用</td>
+</tr>
+<tr>
+<td>s/exp/xxx/g</td>
+<td>匹配正则内容，然后替换内容(支持正则)，结尾 <code>g</code> 代表全局匹配</td>
+</tr>
+</tbody>
+</table>
+<p>sed 匹配范围</p>
+<table>
+<thead>
+<tr>
+<th>范围</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>空地址</td>
+<td>全文处理</td>
+</tr>
+<tr>
+<td>单地址</td>
+<td>指定文件某一行</td>
+</tr>
+<tr>
+<td>/pattern/</td>
+<td>被模式匹配的某一行</td>
+</tr>
+<tr>
+<td>范围区间</td>
+<td>10,20 十到二十行 10,+5 第十行向下5行。/pattern1/,/pattern2/</td>
+</tr>
+<tr>
+<td>步长</td>
+<td>1~2 1,3,5,7,9。2~2两个步长，表示2,4,6,8,10 偶数行</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 忽略准备数据</span></span><br><span class="line">sed -n <span class="string">&quot;2,3p&quot;</span> 2.txt</span><br><span class="line">sed -n <span class="string">&quot;1~2p&quot;</span> 2.txt</span><br><span class="line">sed -n <span class="string">&quot;2,+2p&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;1a=======&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;1i=======&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;1d&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;s/I/Your/g&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;2s/I/Your/g&quot;</span> 2.txt</span><br></pre></td></tr></table></figure>
+<p><img src="sed1.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sed -n <span class="string">&quot;/linux/p&quot;</span> 2.txt</span><br><span class="line">sed -i <span class="string">&quot;/qq/d&quot;</span> 2.txt</span><br><span class="line"><span class="built_in">cat</span> -n 2.txt</span><br><span class="line">sed <span class="string">&quot;s@I@Hers@g&quot;</span> 2.txt</span><br><span class="line">sed <span class="string">&quot;s#I#His#g&quot;</span> 2.txt</span><br></pre></td></tr></table></figure>
+<p><img src="sed2.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&quot;2iMy qq is 123453453&quot;</span> 2.txt</span><br><span class="line"><span class="built_in">cat</span> -n 2.txt</span><br><span class="line">sed -e <span class="string">&quot;s/I/My/g&quot;</span> -e <span class="string">&quot;s/123453453/110/g&quot;</span> 2.txt</span><br><span class="line"><span class="comment"># 提取 IP 地址</span></span><br><span class="line">ifconfig eth0</span><br><span class="line">ifconfig eth0 | sed -n <span class="string">&quot;2p&quot;</span></span><br><span class="line">ifconfig eth0 | sed -n <span class="string">&quot;2p&quot;</span> | sed <span class="string">&quot;s/^.*inet//&quot;</span></span><br><span class="line">ifconfig eth0 | sed -n <span class="string">&quot;2p&quot;</span> | sed <span class="string">&quot;s/^.*inet//&quot;</span> | sed <span class="string">&quot;s/net.*$//g&quot;</span></span><br><span class="line">ifconfig eth0 | sed -e <span class="string">&quot;2s/^.*inet//g&quot;</span> -e <span class="string">&quot;2s/net.*$//gp&quot;</span> -n</span><br><span class="line"><span class="comment"># 去掉空格</span></span><br><span class="line">ifconfig eth0 | sed -e <span class="string">&quot;2s/^.*inet//g&quot;</span> -e <span class="string">&quot;2s/net.*$//g&quot;</span> -e <span class="string">&quot;2s/ //gp&quot;</span> -n</span><br></pre></td></tr></table></figure>
+<p><img src="sed3.png" alt="" /></p>
+<h2 id="awk"><a class="markdownIt-Anchor" href="#awk"></a> awk</h2>
+<p>有强大的文本格式化能力，处理成专业表格形式。awk最早是在 <code>Unix</code> 上实现。我们用的 <code>awk</code> 是 <code>GUN awk</code> 即 <code>gawk</code>。awk 更是一门编程语言，支持条件判断，数组，循环等功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 语法</span><br><span class="line">sed [选项] &#x27;模式[动作]&#x27; 文件</span><br><span class="line">sed options pattern &#123;action&#125; file</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Action 指的是动作，awk擅长文本格式化，且输出格式化的结果，因此最常用的动作是 <code>print</code> 和 <code>printf</code>。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;1..10&#125;;<span class="keyword">do</span> <span class="keyword">for</span> j <span class="keyword">in</span> &#123;1..5&#125;;<span class="keyword">do</span> <span class="built_in">echo</span> -n <span class="string">&quot;hello<span class="subst">$((i*j)</span>) &quot;</span> &gt;&gt; 3.txt;<span class="keyword">done</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&#x27;&#x27;</span> &gt;&gt; 3.txt;<span class="keyword">done</span>;</span><br><span class="line"><span class="built_in">cat</span> 3.txt</span><br><span class="line"><span class="comment"># 取出第二列</span></span><br><span class="line"><span class="built_in">cat</span> 3.txt | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="awk1.png" alt="" /></p>
+<ul>
+<li>我们执行的命令是 <code>awk '&#123;print $2&#125;'</code>，并没有使用参数和模式，<code>$2</code> 表示输出文本的第二列信息</li>
+<li>awk默认以空格为分隔符，且多个空格也识别为一个空格，作为分隔符</li>
+<li>awk是按行处理文件，一行处理完毕，处理下一行，根据用户指定的分隔符去工作，没有指定则默认空格</li>
+<li>指定分隔符后，<code>awk</code> 把每一行切割后的数据对应到内置变量</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$0</span>      表示整行</span><br><span class="line"><span class="variable">$NF</span>     表示当前分割后的最后一列</span><br><span class="line">$(NF-1) 倒数第二列</span><br></pre></td></tr></table></figure>
+<p>常用内置变量</p>
+<table>
+<thead>
+<tr>
+<th>内置变量</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$n</td>
+<td>指定分隔符后，当前记录的第N个字段</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>完整的输入记录</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>(number of fiels) 分割后，当前行一共有多少个字段</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>(number of records) 当前记录数，行数</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>输入分隔符，默认是空格</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出分隔符，默认是空格</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>输入换行符，默认是换行符，指定输入的换行符</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出换行符，默认是换行符，指定输出的换行符</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>各文件分别计数的行号</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>ARGC</td>
+<td>命令行参数的个数</td>
+</tr>
+<tr>
+<td>ARGV</td>
+<td>数组，保存的是命令行给定的参数</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;print $3&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;print $NF&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;print $1$3$NF&#125;&#x27;</span> 3.txt</span><br></pre></td></tr></table></figure>
+<p><img src="awk2.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $1,$3,$NF&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;print &quot;第一列：&quot;$1,&quot;第三列：&quot;$3,&quot;最后一列：&quot;$NF&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;print&#125;&#x27;</span> 3.txt</span><br></pre></td></tr></table></figure>
+<p><img src="awk3.png" alt="" /></p>
+<p>参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-F</td>
+<td>指定分割字符</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>定义或修改一个 <code>awk</code> 内部变量</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>从脚本文件中读取 <code>awk</code> 命令</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd -n | <span class="built_in">head</span> -n 5</span><br><span class="line">awk <span class="string">&#x27;NR==3&#x27;</span> /etc/passwd</span><br><span class="line">awk <span class="string">&#x27;NR==3&#123;print $0&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk <span class="string">&#x27;NR==3,NR==5&#123;print $0&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk <span class="string">&#x27;&#123;print NR,$1&#125;&#x27;</span> 3.txt</span><br><span class="line">awk <span class="string">&#x27;NR==20,NR==23&#123;print NR,$0&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;NR==20,NR==23&#123;print NR,$1&#125;&#x27;</span> /etc/passwd</span><br><span class="line"><span class="comment"># 查看 IP</span></span><br><span class="line">ifconfig eth0 | awk <span class="string">&#x27;NR==2&#123;print $2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="awk4.png" alt="" /></p>
+<p>分隔符有两种</p>
+<ul>
+<li>输入分隔符，默认空格。变量名是 <code>FS</code> (field separator)</li>
+<li>输出分隔符，<code>OFS</code> (output field separator)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;NR==1,NR==4&#123;print $1&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -v FS=<span class="string">&quot;:&quot;</span> <span class="string">&#x27;NR==1,NR==4&#123;print $NF&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -v FS=<span class="string">&quot;:&quot;</span> -v OFS=<span class="string">&quot; | &quot;</span> <span class="string">&#x27;NR==1,NR==4&#123;print $1,$NF&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -F <span class="string">&quot;:&quot;</span> -v OFS=<span class="string">&quot; | &quot;</span> <span class="string">&#x27;NR==1,NR==4&#123;print $1,$NF&#125;&#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="awk5.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print NR,FNR,$0&#125;&#x27;</span> 2.txt 3.txt</span><br><span class="line">awk -v RS=<span class="string">&quot;.&quot;</span> <span class="string">&#x27;&#123;print NR,$0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk -v OFS=<span class="string">&quot;---|---&quot;</span> <span class="string">&#x27;&#123;print NR,$0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk -v ORS=<span class="string">&quot;---|---&quot;</span> <span class="string">&#x27;&#123;print NR,$0&#125;&#x27;</span> 2.txt</span><br></pre></td></tr></table></figure>
+<p><img src="awk6.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print NR,FILENAME,$0&#125;&#x27;</span> 2.txt 3.txt</span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;Start AWK !!&quot;&#125; &#123;print ARGV[0],$0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;Start AWK !!&quot;&#125; &#123;print ARGV[1],$0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk -v name=<span class="string">&quot;feng&quot;</span> <span class="string">&#x27;BEGIN&#123;print &quot;Start AWK !!&quot;&#125; &#123;print ARGV[0],ARGV[1],ARGV[2],ARGV[3]&#125;&#x27;</span> 1.txt 2.txt</span><br><span class="line">awk -v name=<span class="string">&quot;feng&quot;</span> <span class="string">&#x27;BEGIN&#123;print &quot;Start AWK !!&quot;&#125; &#123;print ARGV[0],ARGV[1],ARGV[2],name&#125;&#x27;</span> 1.txt 2.txt</span><br><span class="line"><span class="comment"># 引用 shell 变量</span></span><br><span class="line">a=<span class="string">&quot;shell args&quot;</span></span><br><span class="line">awk -v a=<span class="string">&quot;<span class="variable">$a</span>&quot;</span> <span class="string">&#x27;BEGIN&#123;print a&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="awk7.png" alt="" /></p>
+<h3 id="格式化输出"><a class="markdownIt-Anchor" href="#格式化输出"></a> 格式化输出</h3>
+<p>前面我们接触到的awk的输出功能，是print，只能对文本简单的输出，并不能美化或者修改格式</p>
+<p>要点：</p>
+<ol>
+<li>其中 print 命令的最大不同是，printf 需要指定 format</li>
+<li>format 用于指定后面的每个item的输出格式</li>
+<li>printf 语句不会自动打印换行符：<code>\n</code></li>
+<li>format 格式的指示符都以%开头，后跟一个字符</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>format</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%c</td>
+<td>显示字符的ASCII</td>
+</tr>
+<tr>
+<td>%d %i</td>
+<td>十进制整数</td>
+</tr>
+<tr>
+<td>%e %E</td>
+<td>科学计数法显示数值</td>
+</tr>
+<tr>
+<td>%f</td>
+<td>显示浮点数</td>
+</tr>
+<tr>
+<td>%g %G</td>
+<td>以科学计数法的格式或浮点数的格式显示数值</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>显示字符串</td>
+</tr>
+<tr>
+<td>%u</td>
+<td>无符号整数</td>
+</tr>
+<tr>
+<td>%%</td>
+<td>显示%自身</td>
+</tr>
+<tr>
+<td>-</td>
+<td>左对齐，默认右对齐</td>
+</tr>
+<tr>
+<td>+</td>
+<td>显示数值符号： <code>printf &quot;%+d&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;printf $0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;printf &quot;%s\n&quot;,$1&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;printf &quot;%s\n&quot;,$0&#125;&#x27;</span> 2.txt</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%s&quot;</span> a b c</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%s\n&quot;</span> a b c</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;== %s ==\n&quot;</span> a b c</span><br></pre></td></tr></table></figure>
+<p><img src="awk8.png" alt="" /></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;NR==3,NR==5&#123;printf &quot;第一列：%s, 第二列：%s\n&quot;, $1,$2&#125;&#x27;</span> 3.txt</span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;BEGIN&#123;printf &quot;%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t%-10s\n&quot;,&quot;Username&quot;,&quot;password&quot;,&quot;UID&quot;,&quot;GID&quot;,&quot;User mark&quot;,&quot;Home dir&quot;,&quot;User bash&quot;&#125;NR==1,NR==10&#123;printf &quot;%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t</span></span><br><span class="line"><span class="string">%-10s\t%-10s\n&quot;,$1,$2,$3,$4,$5,$6,$7&#125;&#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="awk9.png" alt="" /></p>
+<p>模式：</p>
+<p><code>awk</code> 是按行处理文本，刚才讲解了 <code>print</code> 动作，现在讲解特殊的 pattern :<br />
+<code>BEGIN</code> 和 <code>END</code></p>
+<ul>
+<li>BEGIN模式是处理文本之前需要执行的操作</li>
+<li>END模式是处理完所有行之后执行的操作</li>
+</ul>
+<p>awk默认是按行处理文本，如果不指定任何模式（条件），awk默认一行行处理<br />
+如果指定了模式，只有符合模式的才会被处理</p>
+<table>
+<thead>
+<tr>
+<th>关系运算符</th>
+<th>解释</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+<td>x&lt;y</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>小于等于</td>
+<td>x&lt;=y</td>
+</tr>
+<tr>
+<td>==</td>
+<td>等于</td>
+<td>x==y</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>不等于</td>
+<td>x!=y</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>大于等于</td>
+<td>x&gt;=y</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+<td>x&gt;y</td>
+</tr>
+<tr>
+<td>~</td>
+<td>匹配正则</td>
+<td>x~/正则/</td>
+</tr>
+<tr>
+<td>!~</td>
+<td>不匹配正则</td>
+<td>x!~/正则/</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;start awk&quot;&#125;NR==3&#123;print &quot;==&quot;,$0&#125;END&#123;print &quot;Stop awk&quot;&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;NR&gt;=4&#123;print $0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;NR!=4&#123;print $0&#125;&#x27;</span> 2.txt</span><br><span class="line">awk <span class="string">&#x27;/^feng/&#123;print $0&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;/^feng/&#123;print $1,$NF&#125;&#x27;</span> /etc/passwd</span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;BEGIN&#123;printf &quot;%-10s\t%-10s\t%-10s\t%-10s\n&quot;,&quot;Username&quot;,&quot;UID&quot;,&quot;Home dir&quot;,&quot;U</span></span><br><span class="line"><span class="string">ser bash&quot;&#125;/^feng/&#123;printf &quot;%-10s\t%-10s\t%-10s\t%-10s\n&quot;,$1,$2,$6,$7&#125;&#x27;</span> /etc/passwd</span><br><span class="line"><span class="comment"># 找出禁止登陆的用户</span></span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;/nologin$/&#123;print $0&#125;&#x27;</span> /etc/passwd</span><br><span class="line">grep <span class="string">&quot;nologin&quot;</span> /etc/passwd -n</span><br><span class="line">awk -F <span class="string">&#x27;:&#x27;</span> <span class="string">&#x27;/^ntp/,/^sshd/&#123;print NR,$0&#125;&#x27;</span> /etc/passwd</span><br><span class="line"><span class="comment"># 统计 nginx 日志访问 IP 数量</span></span><br><span class="line">awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> access.log | <span class="built_in">sort</span> -n | <span class="built_in">uniq</span> | <span class="built_in">wc</span> -l</span><br><span class="line"><span class="comment"># 统计 nginx 访问最频繁的 IP</span></span><br><span class="line">awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> access.log | <span class="built_in">sort</span> -n | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr | <span class="built_in">head</span> 10</span><br></pre></td></tr></table></figure>
+<p><img src="awk10.png" alt="" /><br />
+<img src="awk11.png" alt="" /></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/shell6/">https://creazyboyone.github.io/shell6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Shell/">Shell</a><a class="post-meta__tags" href="/tags/%E8%84%9A%E6%9C%AC/">脚本</a></div><nav id="pagination"><div class="next-post pull-right"><a href="/shell5/"><span>Shell学习（五）</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

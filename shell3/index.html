@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Shell学习（三）"><meta name="keywords" content="Shell,脚本"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>Shell学习（三） | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shell%E8%84%9A%E6%9C%AC%E5%BC%80%E5%8F%91%E4%B9%8B%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">1.</span> <span class="toc-text"> shell脚本开发之条件判断</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#read-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.</span> <span class="toc-text"> read 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E6%9D%A1%E4%BB%B6%E6%B5%8B%E8%AF%95%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text"> 用于条件测试的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#test-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text"> test 表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.4.</span> <span class="toc-text"> 实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91-%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81"><span class="toc-number">1.5.</span> <span class="toc-text"> 实战开发 (参数验证)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91-%E6%8F%90%E4%BE%9B%E7%94%A8%E6%88%B7%E9%80%89%E6%8B%A9%E6%89%A7%E8%A1%8C%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="toc-number">1.6.</span> <span class="toc-text"> 实战开发 (提供用户选择执行的脚本)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%88%A4%E6%96%AD%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text"> 逻辑判断总结</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Shell学习（三）</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-12-19</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/">技术栈</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E8%BF%90%E7%BB%B4/">运维</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="shell脚本开发之条件判断"><a class="markdownIt-Anchor" href="#shell脚本开发之条件判断"></a> shell脚本开发之条件判断</h1>
+<p>把复杂的命令执行过程，通过逻辑代码，组成一个脚本文件，再去执行该文件。</p>
+<span id="more"></span>
+<h2 id="read-命令"><a class="markdownIt-Anchor" href="#read-命令"></a> read 命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;tips&quot;</span> abc           <span class="comment"># 读取用户输入赋值 abc</span></span><br><span class="line"><span class="built_in">read</span> -t 10 -p <span class="string">&quot;tips&quot;</span> abc     <span class="comment"># 读取用户输入赋值 abc，等待10秒</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;tips&quot;</span> abc cdf ghi   <span class="comment"># 读取用户输入赋值 abc,cdf,ghi 三个变量</span></span><br></pre></td></tr></table></figure>
+<h2 id="用于条件测试的命令"><a class="markdownIt-Anchor" href="#用于条件测试的命令"></a> 用于条件测试的命令</h2>
+<ul>
+<li>test 表达式</li>
+<li>[表达式]</li>
+<li>[[表达式]]</li>
+<li>((表达式))</li>
+</ul>
+<h2 id="test-表达式"><a class="markdownIt-Anchor" href="#test-表达式"></a> test 表达式</h2>
+<p>test命令参数</p>
+<ol>
+<li>关于文件类型判断真假
+<ul>
+<li>-e 判断文件是否存在(普通文件，目录)，存在为真，不存在为假</li>
+<li>-f 判断是否为文件</li>
+<li>-d 判断是否为目录</li>
+<li>-b 判断是否为 block device</li>
+<li>-c 判断是否为 character device</li>
+<li>-s 判断是否为 socket 文件</li>
+<li>-p 判断是否为 FIFO (pipe) 文件</li>
+<li>-L 判断是否为连结档</li>
+</ul>
+</li>
+<li>关于文件权限判断真假
+<ul>
+<li>-r 判断该文件是否 <code>读取</code> 属性</li>
+<li>-w 判断该文件是否 <code>写入</code> 属性</li>
+<li>-x 判断该文件是否 <code>执行</code> 属性</li>
+<li>-u 判断该文件是否 <code>SUID</code> 属性</li>
+<li>-g 判断该文件是否 <code>SGID</code> 属性</li>
+<li>-k 判断该文件是否 <code>Sticky bit</code> 属性</li>
+<li>-s 判断该文件是否为非空白文件</li>
+</ul>
+</li>
+<li>两个文件之间的比较
+<ul>
+<li>-nt (newer than) 判断 file1 是否比 file2 新</li>
+<li>-ot (older than) 判断 file1 是否比 file2 旧</li>
+<li>-ef 判断 file1 和 file2 是否为同一个文件（可用于判断 <code>hard link</code> 的判定上，意义在于判定两个文件是否同时指向同一个 <code>inode</code> 哩）</li>
+</ul>
+</li>
+<li>关于两个整数大小之间的判定
+<ul>
+<li>-eq (equal) 两个数相等</li>
+<li>-ne (not equal) 两个数不等</li>
+<li>-gt (greater than) n1 大于 n2</li>
+<li>-lt (less than) n1 小于 n2</li>
+<li>-ge (greater than or equal) n1 大于等于 n2</li>
+<li>-le (less than or equal) n1 小于等于 n2</li>
+</ul>
+</li>
+<li>判断字符串的数据
+<ul>
+<li>-z (zero) 判断字符串是否为 <code>0</code> 如果是空字符串，返回 <code>true</code></li>
+<li>-n (no zero) 判断字符串是否为 <code>0</code> 如果是空字符串，返回 <code>false</code></li>
+<li>= 相等返回 <code>true</code></li>
+<li>!= 不等返回 <code>false</code></li>
+<li>! 取反</li>
+</ul>
+</li>
+<li>多重条件判定</li>
+</ol>
+<h2 id="实践"><a class="markdownIt-Anchor" href="#实践"></a> 实践</h2>
+<ol>
+<li>
+<p>关于文件类型，权限判断真假</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>英文写法</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%%</td>
+<td>-a</td>
+<td>与</td>
+</tr>
+<tr>
+<td>||</td>
+<td>-o</td>
+<td>或</td>
+</tr>
+<tr>
+<td>!</td>
+<td>!</td>
+<td>非</td>
+</tr>
+</tbody>
+</table>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">test</span> -e 1.sh</span><br><span class="line"><span class="built_in">echo</span> $?</span><br><span class="line"><span class="built_in">test</span> -e a.sh</span><br><span class="line"><span class="built_in">echo</span> $?</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件存在打印提示，不存在则创建</span></span><br><span class="line"><span class="built_in">test</span> -e a.txt &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;File exist!&quot;</span> || <span class="built_in">touch</span> a.txt</span><br><span class="line"><span class="built_in">test</span> -e hello &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;Dir/File exist!&quot;</span> || <span class="built_in">mkdir</span> hello</span><br><span class="line"></span><br><span class="line"><span class="built_in">test</span> -f a.txt &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yes&quot;</span> || <span class="built_in">echo</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"><span class="built_in">test</span> -d hello &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yes&quot;</span> || <span class="built_in">echo</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">test</span> -z <span class="string">&quot;&quot;</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yes&quot;</span> || <span class="built_in">echo</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"><span class="built_in">test</span> -n <span class="string">&quot;&quot;</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yes&quot;</span> || <span class="built_in">echo</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"><span class="built_in">test</span> <span class="string">&quot;&quot;</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yes&quot;</span> || <span class="built_in">echo</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中括号测试</span></span><br><span class="line"><span class="comment"># 条件测试中，变量必须加上双引号</span></span><br><span class="line">file=<span class="string">&quot;1.sh&quot;</span></span><br><span class="line">[ -f <span class="string">&quot;<span class="variable">$file</span>&quot;</span> ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">file=<span class="string">&quot;qq.sh&quot;</span></span><br><span class="line">[ -f <span class="string">&quot;<span class="variable">$file</span>&quot;</span> ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更严谨的创建文件</span></span><br><span class="line">[ -f a.png ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">touch</span> a.png</span><br><span class="line"></span><br><span class="line"><span class="comment"># 双中括号(暂时没啥区别)</span></span><br><span class="line"><span class="comment"># 验证权限</span></span><br><span class="line"><span class="built_in">touch</span> qx</span><br><span class="line"><span class="built_in">chmod</span> 0 qx</span><br><span class="line">[ -r qx ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"><span class="built_in">chmod</span> +r qx</span><br><span class="line">[ -r qx ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"><span class="built_in">chmod</span> +w qx</span><br><span class="line">[ -w qx ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"><span class="comment"># -x 执行同理不测了</span></span><br><span class="line"><span class="comment"># 取反</span></span><br><span class="line">[ ! -f 1.sh ] &amp;&amp; <span class="built_in">echo</span> <span class="built_in">yes</span> || <span class="built_in">echo</span> no</span><br></pre></td></tr></table></figure>
+<p><img src="test1.png" alt="测试" /></p>
+</li>
+<li>
+<p>数值比较(整数)</p>
+<p>在 <code>[]</code> 中，可以用字符 <code>-gt -lt -ge</code> 等，也可以用 <code>&gt; &lt; &gt;=</code> 比较。但需要加上转 义 符号。而 <code>[[]]</code> 中可以不加。</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[ 2 &gt; 1 ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[ 1 &gt; 2 ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[ 1 \&gt; 2 ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[ 1 -gt 2 ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[ 1 -lt 2 ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ 1 &gt; 2 ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ 1 = 2 ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ 2 = 2 ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ 2 != 2 ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"></span><br><span class="line"><span class="comment"># 变量和 test 同理</span></span><br><span class="line"><span class="built_in">test</span> <span class="string">&quot;<span class="variable">$&#123;a&#125;</span>&quot;</span> -gt <span class="string">&quot;<span class="variable">$&#123;b&#125;</span>&quot;</span> &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line"></span><br><span class="line"><span class="comment"># 逻辑符号处理</span></span><br><span class="line">file1=/etc/hostname</span><br><span class="line">file2=/etc/hosts</span><br><span class="line">[ -f <span class="string">&quot;<span class="variable">$file1</span>&quot;</span> -a -f <span class="string">&quot;<span class="variable">$file2</span>&quot;</span> ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">file2=/tmp/a</span><br><span class="line">[ -f <span class="string">&quot;<span class="variable">$file1</span>&quot;</span> -a -f <span class="string">&quot;<span class="variable">$file2</span>&quot;</span> ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[ -f <span class="string">&quot;<span class="variable">$file1</span>&quot;</span> -o -f <span class="string">&quot;<span class="variable">$file2</span>&quot;</span> ] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br></pre></td></tr></table></figure>
+<p><img src="int.png" alt="数值比较" /><br />
+<img src="logic.png" alt="逻辑运算" /></p>
+</li>
+<li>
+<p>双中括号<br />
+一般属于特殊场景的的语法正则匹配，最常用的还是 <code>[]</code></p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [] 逻辑运算只能用 -a -o</span></span><br><span class="line"><span class="comment"># [[]] 逻辑运算能用 &amp;&amp; ||</span></span><br><span class="line">a=<span class="string">&quot;&quot;</span></span><br><span class="line">b=<span class="string">&quot;yuyu&quot;</span></span><br><span class="line">[[ -n <span class="string">&quot;<span class="variable">$a</span>&quot;</span> &amp;&amp; <span class="string">&quot;<span class="variable">$a</span>&quot;</span> = <span class="string">&quot;<span class="variable">$b</span>&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ -n <span class="string">&quot;<span class="variable">$a</span>&quot;</span> || <span class="string">&quot;<span class="variable">$a</span>&quot;</span> = <span class="string">&quot;<span class="variable">$b</span>&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">[[ -n <span class="string">&quot;<span class="variable">$a</span>&quot;</span> &amp;&amp; ! <span class="string">&quot;<span class="variable">$a</span>&quot;</span> = <span class="string">&quot;<span class="variable">$b</span>&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br><span class="line">a=<span class="string">&quot;yu&quot;</span></span><br><span class="line">[[ -n <span class="string">&quot;<span class="variable">$a</span>&quot;</span> &amp;&amp; ! <span class="string">&quot;<span class="variable">$a</span>&quot;</span> = <span class="string">&quot;<span class="variable">$b</span>&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span> ok || <span class="built_in">echo</span> no</span><br></pre></td></tr></table></figure>
+<p><img src="logic2.png" alt="双中括号逻辑运算" /></p>
+</li>
+</ol>
+<h2 id="实战开发-参数验证"><a class="markdownIt-Anchor" href="#实战开发-参数验证"></a> 实战开发 (参数验证)</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;Pls input a char:&quot;</span> var1</span><br><span class="line"><span class="comment"># 逻辑条件测试</span></span><br><span class="line">[ <span class="string">&quot;<span class="variable">$var1</span>&quot;</span> -eq <span class="string">&quot;1&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$var1</span></span><br><span class="line">  <span class="built_in">exit</span> 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[ <span class="string">&quot;<span class="variable">$var1</span>&quot;</span> -eq <span class="string">&quot;2&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$var1</span></span><br><span class="line">  <span class="built_in">exit</span> 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[ <span class="string">&quot;<span class="variable">$var1</span>&quot;</span> != <span class="string">&quot;1&quot;</span> -a <span class="string">&quot;<span class="variable">$var1</span>&quot;</span> != <span class="string">&quot;2&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Error, input 1|2 &quot;</span></span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="logic3.png" alt="参数验证" /></p>
+<h2 id="实战开发-提供用户选择执行的脚本"><a class="markdownIt-Anchor" href="#实战开发-提供用户选择执行的脚本"></a> 实战开发 (提供用户选择执行的脚本)</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 准备两个脚本</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;echo LAMP is installed !&quot;</span> &gt; lamp.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;echo LNMP is installed !&quot;</span> &gt; lnmp.sh</span><br><span class="line"><span class="built_in">chmod</span> +x *.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 脚本开始</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 找到脚本，优先处理错误的情况</span></span><br><span class="line">path=/home/feng/shell</span><br><span class="line">[ ! -d lamp.sh ] &amp;&amp; <span class="built_in">mkdir</span> -p <span class="variable">$path</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">END</span></span><br><span class="line"><span class="string">    1. [install lamp]</span></span><br><span class="line"><span class="string">    2. [install lnmp]</span></span><br><span class="line"><span class="string">    3. [exit]</span></span><br><span class="line"><span class="string">    Pls input the num you want:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">END</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> num</span><br><span class="line"></span><br><span class="line"><span class="comment"># 限制用户输入的是数字</span></span><br><span class="line"><span class="built_in">expr</span> <span class="variable">$num</span> + 1 &amp;&gt; /dev/null</span><br><span class="line">[ $? -ne 0 ] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Must be 1|2|3&quot;</span></span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据变量来逻辑处理</span></span><br><span class="line">[ <span class="string">&quot;<span class="variable">$num</span>&quot;</span> -eq <span class="string">&quot;1&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  [ -x <span class="string">&quot;<span class="variable">$path</span>/lamp.sh&quot;</span> ] || &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Can&#x27;t be exec!&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Start install LAMP, wait...&quot;</span></span><br><span class="line">  <span class="built_in">sleep</span> 2</span><br><span class="line">  <span class="variable">$path</span>/lamp.sh</span><br><span class="line">  <span class="built_in">exit</span> $?</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[ <span class="string">&quot;<span class="variable">$num</span>&quot;</span> -eq <span class="string">&quot;2&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  [ -x <span class="string">&quot;<span class="variable">$path</span>/lnmp.sh&quot;</span> ] || &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Can&#x27;t be exec!&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Start install LNMP, wait...&quot;</span></span><br><span class="line">  <span class="built_in">sleep</span> 2</span><br><span class="line">  <span class="variable">$path</span>/lnmp.sh</span><br><span class="line">  <span class="built_in">exit</span> $?</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[ <span class="variable">$num</span> -eq <span class="string">&quot;3&quot;</span> ] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;byebye&quot;</span></span><br><span class="line">  <span class="built_in">exit</span> 3</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># [[]] 正则匹配</span></span><br><span class="line">[[ ! <span class="string">&quot;<span class="variable">$num</span>&quot;</span> =~ [1-3] ]] &amp;&amp; &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Must be 1-3&quot;</span></span><br><span class="line">  <span class="built_in">exit</span> 4</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="logic4.png" alt="用户选择运行" /></p>
+<h2 id="逻辑判断总结"><a class="markdownIt-Anchor" href="#逻辑判断总结"></a> 逻辑判断总结</h2>
+<p>最常见就 <code>[]</code> 配合 <code>-gt -lt</code> 使用</p>
+<table>
+<thead>
+<tr>
+<th>测试表达式符号</th>
+<th>[]</th>
+<th>test</th>
+<th>[[]]</th>
+<th>(())</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>边界是否需要空格</td>
+<td>需要</td>
+<td>需要</td>
+<td>需要</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>逻辑操作符</td>
+<td>! -a -o</td>
+<td>! -a -o</td>
+<td>! &amp;&amp; ||</td>
+<td>! &amp;&amp; ||</td>
+</tr>
+<tr>
+<td>整数比较</td>
+<td>-eq -gt -lt -ge -le</td>
+<td>-eq -gt -lt -ge -le</td>
+<td>-eq -gt -lt -ge -le 或 = &gt; &lt; &gt;= &lt;=</td>
+<td>= &gt; &lt; &gt;= &lt;=</td>
+</tr>
+<tr>
+<td>字符串比较</td>
+<td>= == !=</td>
+<td>= == !=</td>
+<td>= == !=</td>
+<td>= == !=</td>
+</tr>
+<tr>
+<td>支持通配符</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/shell3/">https://creazyboyone.github.io/shell3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Shell/">Shell</a><a class="post-meta__tags" href="/tags/%E8%84%9A%E6%9C%AC/">脚本</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/shell4/"><i class="fa fa-chevron-left">  </i><span>Shell学习（四）</span></a></div><div class="next-post pull-right"><a href="/shell2/"><span>Shell学习（二）</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

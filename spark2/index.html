@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Spark 深入学习(二)"><meta name="keywords" content="大数据,Spark,数据挖掘"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>Spark 深入学习(二) | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text"> 开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8Espark%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%BC%80%E5%A7%8B"><span class="toc-number">1.1.</span> <span class="toc-text"> 从Spark的工作原理开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdd"><span class="toc-number">1.1.1.</span> <span class="toc-text"> RDD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#application"><span class="toc-number">1.1.2.</span> <span class="toc-text"> Application</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#driver"><span class="toc-number">1.1.3.</span> <span class="toc-text"> Driver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#job"><span class="toc-number">1.1.4.</span> <span class="toc-text"> Job</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#task"><span class="toc-number">1.1.5.</span> <span class="toc-text"> Task</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stage"><span class="toc-number">1.1.6.</span> <span class="toc-text"> Stage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#worker"><span class="toc-number">1.1.7.</span> <span class="toc-text"> Worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shuffle"><span class="toc-number">1.1.8.</span> <span class="toc-text"> Shuffle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dagscheduler"><span class="toc-number">1.1.9.</span> <span class="toc-text"> DAGScheduler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#taskscheduler"><span class="toc-number">1.1.10.</span> <span class="toc-text"> TaskScheduler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E4%BB%8B%E7%BB%8D%E4%B8%8B%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.11.</span> <span class="toc-text"> 最后介绍下流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">1.2.</span> <span class="toc-text"> 后记</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Spark 深入学习(二)</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-12-02</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/">技术栈</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E5%A4%A7%E6%95%B0%E6%8D%AE/Spark/">Spark</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="开始"><a class="markdownIt-Anchor" href="#开始"></a> 开始</h1>
+<blockquote>
+<p>先了解一波专有名词，再去看教程或者文档，应该会比较容易理解吧~~~<br />
+大概包含 <code>Worker</code>，<code>Driver</code>，<code>Executor</code>，<code>Stage</code>，<code>Task</code>，<code>DAGScheduler</code>，<code>TaskScheduler</code>，<code>RDD</code>，<code>Stage</code>，<code>Shuffle</code>,<code>算子</code>…</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="从spark的工作原理开始"><a class="markdownIt-Anchor" href="#从spark的工作原理开始"></a> 从Spark的工作原理开始</h2>
+<p>从模型开始，到任务名词~</p>
+<h3 id="rdd"><a class="markdownIt-Anchor" href="#rdd"></a> RDD</h3>
+<ol>
+<li>RDD 是 Spark 的计算模型。RDD（Resilient Distributed Dataset）叫做弹性分布式数据集合。(本质上是一个只读的分区记录集合，类似Java的Set。每个RDD可以有多个分区（<code>Partition</code>）)，每个分区可以保存在不同的节点上，从而可以在集群中的不同结点上进行并行计算。
+<ul>
+<li>只读：不能修改，只能通过转换操作生成新的 RDD。</li>
+<li>分布式：可以分布在多台机器上进行并行处理。</li>
+<li>弹性：计算过程中内存不够时它会和磁盘进行数据交换。</li>
+<li>基于内存：可以全部或部分缓存在内存中，在多次计算间重用。</li>
+</ul>
+</li>
+<li>RDD 的操作分为转化（<code>Transformation</code>）操作和行动（<code>Action</code>）操作。转化操作就是从一个 RDD 产生一个新的 RDD，而行动操作就是进行实际的计算。<br />
+RDD 的操作是惰性的，当 RDD 执行转化操作的时候，实际计算并没有被执行，只有当 RDD 执行行动操作时才会促发计算任务提交，从而执行相应的计算操作。(可以理解为：执行 <code>RDD.map().count()</code> 时，<code>map()</code>是转化。但是执行到这一步时，并没有具体操作，而是等待下一步的<code>count()</code>这个<code>Action</code>执行。然后<code>count()</code>的执行去触发前面<code>map()</code>的执行。这样有个好处：能针对不同的<code>Action</code>操作，去优化前面的<code>Transformation</code>的计算方法。)</li>
+<li>RDD 血缘关系（Lineage）它描述了一个 RDD 是如何从父 RDD 计算得来的。如果某个 RDD 丢失了，则可以根据血缘关系，从父 RDD 重新计算得来。这里应该是有个<code>RDD</code>的继承关系(DAG 拓扑排序)(这是最重要的，能保持因各种原因丢失数据时，能够重新计算而不是直接任务失败，或者全部重新计算。原理有点像断网续传~)<br />
+<img src="1.gif" alt="示意图" /></li>
+<li>RDD 的依赖类型。根据不同的转换操作，RDD 血缘关系的依赖分为窄依赖和宽依赖。窄依赖是指父 RDD 的每个分区都只被子 RDD 的一个分区所使用。宽依赖是指父 RDD 的每个分区都被多个子 RDD 的分区所依赖。<br />
+<img src="2.gif" alt="宽依赖和窄依赖" /><br />
+Spark 的这种依赖关系设计，使其具有了天生的容错性，大大加快了 Spark 的执行速度。RDD 通过血缘关系记住了它是如何从其他 RDD 中演变过来的。当这个 RDD 的部分分区数据丢失时，它可以通过血缘关系获取足够的信息来重新运算和恢复丢失的数据分区，从而带来性能的提升。(印证了第三点)<br />
+相对而言，窄依赖的失败恢复更为高效，它只需要根据父 RDD 分区重新计算丢失的分区即可，而不需要重新计算父 RDD 的所有分区。而对于宽依赖来讲，单个结点失效，即使只是 RDD 的一个分区失效，也需要重新计算父 RDD 的所有分区，开销较大。<br />
+宽依赖操作就像是将父 RDD 中所有分区的记录进行了“洗牌”，数据被打散，然后在子 RDD 中进行重组。</li>
+<li>提前提一下阶段（<code>Stage</code>）。用户提交的计算任务是一个由 RDD 构成的 DAG，如果 RDD 的转换是宽依赖，那么这个宽依赖转换就将这个 DAG 分为了不同的阶段（Stage)。由于宽依赖会带来“洗牌”，所以不同的 Stage 是不能并行计算的，后面 Stage 的 RDD 的计算需要等待前面 Stage 的 RDD 的所有分区全部计算完毕以后才能进行。（这里有点难，得画图想想。图中阶段2和阶段3可以同时进行。理解为：假设分区1较大，分区2较小，分区2很快计算完成阶段2的内容。然后接着分区2就接着进行阶段3计算。这时分区1还在阶段2。所以窄依赖可以跨阶段并行）<br />
+<img src="3.png" alt="任务被分解成继承关系的猜想" /><br />
+这点就类似于在 MapReduce 中，Reduce 阶段的计算必须等待所有 Map 任务完成后才能开始一样。<br />
+在对 Job 中的所有操作划分 Stage 时，一般会按照倒序进行，即从 Action 开始，遇到窄依赖操作，则划分到同一个执行阶段，遇到宽依赖操作，则划分一个新的执行阶段。后面的 Stage 需要等待所有的前面的 Stage 执行完之后才可以执行，这样 Stage 之间根据依赖关系就构成了一个大粒度的 DAG。(前面是我的想法…下图这个才是真的，想想也是：既然可以并行，那不必细分Stage了。而且划分<code>Stage</code>时倒序进行真的太合理了，这也解释上文第二点说的<code>Transformation</code>和<code>Action</code>操作：根据<code>Action</code>倒推<code>Transformation</code>，然后再分<code>Stage</code>。牛逼哄哄~)<br />
+<img src="4.gif" alt="再次示意" /></li>
+<li>RDD缓存。Spark RDD 是惰性求值的，而有时候希望能多次使用同一个 RDD。如果简单地对 RDD 调用行动操作，Spark 每次都会重算 RDD 及它的依赖，这样就会带来太大的消耗。为了避免多次计算同一个 RDD，可以让 Spark 对数据进行持久化。(理解为：多次调用<code>RDD.map().count()</code>时，由于惰性求值原因，每次调用<code>.count()</code>时，得重新计算<code>.map()</code>，而map又依赖<code>RDD</code>，<code>RDD</code> 可能又依赖父<code>RDD</code>…导致整条链路得重新计算一遍！)<br />
+Spark 可以使用 persist 和 cache 方法将任意 RDD 缓存到内存、磁盘文件系统中。缓存是容错的，如果一个 RDD 分片丢失，则可以通过构建它的转换来自动重构。被缓存的 RDD 被使用时，存取速度会被大大加速。一般情况下，<code>Executor</code> 内存的 60% 会分配给 cache，剩下的 40％ 用来执行任务。</li>
+<li>没了，终于了解完<code>RDD</code>了，扯出来了很多核心内容。不愧是核心名词。</li>
+</ol>
+<h3 id="application"><a class="markdownIt-Anchor" href="#application"></a> Application</h3>
+<p>application（应用）其实就是用spark-submit提交的程序。比方说spark examples中的计算pi的SparkPi。一个application通常包含三部分：从数据源（比方说HDFS）取数据形成RDD，通过RDD的transformation和action进行计算，将结果输出到console或者外部存储（比方说collect收集输出到console）。(比较容易理解，一个要submit的py文件，Jar包，Scala的文件)</p>
+<h3 id="driver"><a class="markdownIt-Anchor" href="#driver"></a> Driver</h3>
+<p>Spark中的<code>Driver</code>感觉其实和yarn中Application Master的功能相类似。主要完成任务的调度以及和<code>executor</code>和<code>cluster manager</code>进行协调。有client和cluster联众模式。client模式driver在任务提交的机器上运行，而cluster模式会随机选择机器中的一台机器启动driver。从spark官网截图的一张图可以大致了解driver的功能。(这个图解释的真好，说明了很多概念的关系)<br />
+<img src="5.png" alt="官网的介绍" /></p>
+<h3 id="job"><a class="markdownIt-Anchor" href="#job"></a> Job</h3>
+<p>Spark中的Job和MR中Job不一样。MR中Job主要是Map或者Reduce Job。而Spark的Job其实很好区别，一个action算子就算一个Job，比方说<code>count()</code>，<code>first()</code>等。</p>
+<h3 id="task"><a class="markdownIt-Anchor" href="#task"></a> Task</h3>
+<p>Task是Spark中最新的执行单元。RDD一般是带有<code>partitions</code>的，每个<code>partition</code>的在一个<code>executor</code>上的执行可以任务是一个Task。（那宽依赖不是得产生N多个<code>Task</code>?）</p>
+<h3 id="stage"><a class="markdownIt-Anchor" href="#stage"></a> Stage</h3>
+<p>Stage概念是spark中独有的。一般而言一个Job会切换成一定数量的stage。各个stage之间按照顺序执行。至于stage是怎么切分的，首选得知道spark论文中提到的narrow dependency(窄依赖)和wide dependency（ 宽依赖）的概念。其实很好区分，看一下父RDD中的数据是否进入不同的子RDD，如果只进入到一个子RDD则是窄依赖，否则就是宽依赖。宽依赖和窄依赖的边界就是stage的划分点。从spark的论文中的两张截图，可以清楚的理解宽窄依赖以及stage的划分。(前面说明了~ 直接看图)<br />
+<img src="6.png" alt="我是一张图" /><br />
+<img src="7.png" alt="我又是一张图" /></p>
+<h3 id="worker"><a class="markdownIt-Anchor" href="#worker"></a> Worker</h3>
+<p>工作节点吧，应该是指（<code>Master - Slave</code>）模式的 <code>Slave</code>。负责计算的节点</p>
+<h3 id="shuffle"><a class="markdownIt-Anchor" href="#shuffle"></a> Shuffle</h3>
+<ol>
+<li>把父RDD中的KV对按照Key重新分区，从而得到一个新的RDD。也就是说原本同属于父RDD同一个分区的数据需要进入到子RDD的不同的分区。(就是宽依赖的重新分区操作?)</li>
+<li>Map-Reduce的输入数据通常是HDFS中的文件，所以数据本地化要求map任务尽量被调度到保存了输入文件的节点执行。但是，有一些计算逻辑是无法简单地获取本地数据的，reduce的逻辑都是如此。对于reduce来说，处理函数的输入是key相同的所有value，但是这些value所在的数据集(即map的输出)位于不同的节点上，因此需要对map的输出进行重新组织，使得同样的key进入相同的reducer。</li>
+<li>shuffle移动了大量的数据，对计算、内存、网络和磁盘都有巨大的消耗，因此，只有确实需要shuffle的地方才应该进行shuffle，否则尽可能避免shuffle。(嗯，点头赞同)</li>
+<li>会触发<code>Shuffle</code>操作的算子:
+<ul>
+<li>去重操作(<code>distinct</code>)</li>
+<li>聚合操作(<code>reduceByKey</code>、<code>groupBy</code>、<code>groupByKey</code>、<code>aggregateByKey</code>、<code>combineByKey</code>等)</li>
+<li>排序操作(<code>sortBy</code>、<code>sortByKey</code>等)</li>
+<li>重分区操作(<code>repartition</code>、<code>repartitionAndSortWithinPartitions</code>、<code>coalesce(shuffle=true)</code>等)</li>
+<li>集合或者表操作(<code>join</code>、<code>cogroup</code>、<code>leftOuterJoin</code>、<code>intersection</code>、<code>subtract</code>、<code>subtractByKey</code>)</li>
+</ul>
+</li>
+</ol>
+<h3 id="dagscheduler"><a class="markdownIt-Anchor" href="#dagscheduler"></a> DAGScheduler</h3>
+<p>实现将Spark作业分解成一到多个Stage，每个Stage根据RDD的Partition个数决定Task的个数，然后生成相应的Task set放到TaskScheduler中。(挺好奇如何分解的，但先打住，后面填坑)<br />
+DAGScheduler是任务调度中的其中一个环节，是任务调度的第一步。DAGScheduler是Spark的较高层次的调度器，它实现了面向Stage（stage-oriented）的调度。它把一个通过RDD的转换操作（RDD Transformations）得到的血缘关系（RDD Lineage）转化成多个Stage，然后为每个Stage生成一个任务集（TaskSet），并把该任务集交给TaskScheduler处理。<br />
+DAGScheduler把每个Job划分成一个或多个Stage，计算和创建一个Stage的DAG，并跟踪RDD和Stage的输出，找出一个最小调度的DAG去执行该Job。然后，它把Stage作为TaskSets传递给TaskScheduler，一个TaskSet包含每个Stage中可以立即执行的独立任务集合。<br />
+<img src="10.jpg" alt="DAGScheduler的过程" /><br />
+具体来说DAGScheduler的功能如下：</p>
+<ol>
+<li>划分和创建Stage：根据RDD之间的依赖类型（窄依赖或宽依赖），为每个Job划分和创建Stage，多个Stage之间相互依赖，形成一个DAG（有向无环图）。</li>
+<li>决定运行Task的最佳位置：根据RDD的依赖关系，缓存或Shuffling数据的位置来计算运行Task的最佳位置。</li>
+<li>为每个Stage创建一个TaskSet，并把TaskSet作为参数传递给TaskScheduler。</li>
+<li>处理失败的Stage：为了从失败中恢复，同样的Stage可能会提交多次。例如：由于前一个Stage的map输出文件丢失，TaskScheduler报告了一个任务失败，DAGScheduler会重新提交丢失的Stage。这是通过一个带有FetchFailed或ExecutorLost的CompletionEvent事件检测到的。DAGScheduler将等待一小段时间以查看其他节点或任务是否失败，然后为任何缺失的Stage重新提交TaskSet。</li>
+<li>当任务运行完成后，清空所有的缓存和临时数据。</li>
+<li>处理各种事件，包括内部的事件，也包括Executor端的状态更新等事件。</li>
+</ol>
+<h3 id="taskscheduler"><a class="markdownIt-Anchor" href="#taskscheduler"></a> TaskScheduler</h3>
+<p>实现Task分配到Executor上执行。(偷个懒应该没人知道吧)<br />
+spark的Task的调度，我们要明白其调度过程，其根据不同的资源管理器拥有不同的调度策略，因此也拥有不同的调度守护进程，这个守护进程管理着集群的资源信息，spark提供了一个基本的守护进程的类，来完成与driver和executor的交互：CoarseGrainedSchedulerBackend，它应该运行在集群资源管理器上，比如yarn等。他收集了集群work机器的一般资源信息。当我们形成tasks将要进行调度的时候，driver进程会与其通信，请求资源的分配和调度，其会把最优的work节点分配给task来执行其任务。而TaskScheduleImpl实现了task调度的过程，采用的调度算法默认的是FIFO的策略，也可以采用公平调度策略。(有点不懂了，后面再回来看)<br />
+<img src="11.png" alt="源代码调用关系" /></p>
+<h3 id="最后介绍下流程"><a class="markdownIt-Anchor" href="#最后介绍下流程"></a> 最后介绍下流程</h3>
+<p><img src="8.png" alt="又是一张好图" /></p>
+<ol>
+<li>首先在SparkContext初始化的时候会创建DAGScheduler,这个DAGScheduelr每个应用只有一个。然后DAGScheduler创建的时候，会初始化一个事件捕获对象，并且开启监听。之后我们的任务都会发给这个事件监听器，它会按照任务的类型创建不同的任务。</li>
+<li>再从客户端程序方面说，当我们调用action操作的时候，就会触发runjob，它内部其实就是向前面的那个事件监听器提交一个任务。</li>
+<li>最后事件监听器调用DAGScheduler的handleJobSubmitted真正的处理。</li>
+<li>处理的时候，会先创建一个resultStage，每个job只有一个resultstage，其余的都是shuffleStage.然后根据rdd的依赖关系，按照广度优先的思想遍历rdd，遇到shufflerdd就创建一个新的stage。</li>
+<li>形成DAG图后，遍历等待执行的stage列表，如果这个stage所依赖的父stage执行完了，它就可以执行了；否则还需要继续等待。</li>
+<li>最终stage会以taskset的形式，提交给TaskScheduler，然后最后提交给excutor。</li>
+</ol>
+<p><img src="9.png" alt="请叫我图片搬运工" /></p>
+<ol>
+<li>[Applicatio 1] Driver（代表一个Application）</li>
+<li>[Job ==&gt;1] 在SparkContext的创建过程中，sc会创建DAGScheduler和TaskScheduler，DAGScheduler主要对application划分stage，创建一批task放到taskset中用于执行application</li>
+<li>[stage ==&gt;2] 如何来划分stage，是有相应的stage的划分算法–&gt;就根据rdd是否宽依赖来划分的，</li>
+<li>[TaskSet] 假设我们rdd有三个分区partition，那么会产生三个task，存放到TaskSet，</li>
+<li>[Task] TaskScheduler就会接收到DAGScheduler的一个通知吧，从taskSet中推送task任务到worker中的executor进程中去执行任务，在taskscheduler中根据，程序的启动方式，创建一个实现ShedulerBackend</li>
+<li>SchedulerBackend：不同的子类对应不同的集群模式</li>
+</ol>
+<h2 id="后记"><a class="markdownIt-Anchor" href="#后记"></a> 后记</h2>
+<p>还有个<code>Executor</code>和<code>DataFrame</code>没看，<code>Executor</code>能猜个大概，后面的再找一天对比python库<code>Pandas</code>的<code>DataFrame</code>有哪些异同~<br />
+明天开始看官方文档，激动搓手手~</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/spark2/">https://creazyboyone.github.io/spark2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a><a class="post-meta__tags" href="/tags/Spark/">Spark</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/spark3/"><i class="fa fa-chevron-left">  </i><span>Spark 深入学习(三)</span></a></div><div class="next-post pull-right"><a href="/spark1/"><span>Spark 深入学习(一)</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

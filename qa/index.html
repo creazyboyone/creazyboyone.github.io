@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="大数据（一）数据建模"><meta name="keywords" content="大数据,数据库,数据建模"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>大数据（一）数据建模 | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1"><span class="toc-number">1.</span> <span class="toc-text"> 数据建模</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1"><span class="toc-number">1.1.</span> <span class="toc-text"> 范式建模</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F1nf"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 第一范式（1NF）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F2nf"><span class="toc-number">1.1.2.</span> <span class="toc-text"> 第二范式（2NF）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E8%8C%83%E5%BC%8F3nf"><span class="toc-number">1.1.3.</span> <span class="toc-text"> 第三范式（3NF）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.4.</span> <span class="toc-text"> 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1"><span class="toc-number">1.2.</span> <span class="toc-text"> 维度建模</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%9F%E5%9E%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 星型模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%AA%E8%8A%B1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text"> 雪花模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%9F%E5%BA%A7%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 星座模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E6%A8%A1%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.4.</span> <span class="toc-text"> 建模步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.4.1.</span> <span class="toc-text"> 选择业务过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E7%B2%92%E5%BA%A6"><span class="toc-number">1.2.4.2.</span> <span class="toc-text"> 声明粒度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E7%BB%B4%E5%BA%A6"><span class="toc-number">1.2.4.3.</span> <span class="toc-text"> 确认维度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E4%BA%8B%E5%AE%9E"><span class="toc-number">1.2.4.4.</span> <span class="toc-text"> 确认事实</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E6%9D%A5%E4%B8%AA%E5%AF%B9%E6%AF%94%E7%9A%84%E8%A1%A8%E6%A0%BC"><span class="toc-number">1.3.</span> <span class="toc-text"> 最后来个对比的表格</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">大数据（一）数据建模</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-03-19</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="数据建模"><a class="markdownIt-Anchor" href="#数据建模"></a> 数据建模</h1>
+<ol>
+<li>模型设计的三个阶段
+<ol>
+<li>概念模型：将业务划分成几个主题</li>
+<li>逻辑模型：定义各种实体、属性、关系</li>
+<li>物理模型：设计数据对象的物理实现，比如表的命名规范、字段的命名规范、字段类型等</li>
+</ol>
+</li>
+<li>数据库建模有 <code>维度建模</code> 和 <code>范式建模</code>.</li>
+</ol>
+<span id="more"></span>
+<h2 id="范式建模"><a class="markdownIt-Anchor" href="#范式建模"></a> 范式建模</h2>
+<ul>
+<li>定义：范式建模将事物抽象为<code>实体</code>(Entity)、<code>属性</code>、<code>关系</code>(Relationship)来表示数据关联和事物描述。也称熟悉的 <code>E-R模型</code>。</li>
+<li>即关系模式。一张数据表的表结构，符合的设计标准的级别</li>
+<li>目的在于降低数据的冗余性和保证数据的一致性。缺点是获取数据时，通常需要通过Join拼接出最后的数据。</li>
+</ul>
+<h3 id="第一范式1nf"><a class="markdownIt-Anchor" href="#第一范式1nf"></a> 第一范式（1NF）：</h3>
+<p>所有的域都应该是原子性的，即数据库表的每一列都是不可分割的原子数据项，而不能是集合，数组，记录等非原子数据项。即实体中的某个属性有多个值时，必须拆分为不同的属性。在符合第一范式（1NF）表中的每个域值只能是实体的一个属性或一个属性的一部分。如：<br/><br />
+<strong>商品: 两个篮球</strong> 可以拆分为 <strong>商品: 篮球， 数量: 2</strong></p>
+<h3 id="第二范式2nf"><a class="markdownIt-Anchor" href="#第二范式2nf"></a> 第二范式（2NF）</h3>
+<p>在 <code>1NF</code> 的基础上，<code>非码属性</code> 必须完全依赖于 <code>候选码</code>（在1NF基础上消除非主属性对主码的部分函数依赖）简而言之，第二范式就是在第一范式的基础上，加上一条规则：<code>属性完全依赖于主键</code>。</p>
+<ul>
+<li>
+<p>码：码是可以确定一个元组的所有信息的属性名或属性名组。<code>姓名，年龄</code>是码，因为<code>姓名，年龄</code>决定了 [姓名、性别、年龄、身高] ，同理，<code>姓名</code>也是是码，但<code>年龄</code>决定不了 [姓名、性别、年龄、身高] 所以年龄不是码。</p>
+</li>
+<li>
+<p>候选码：候选码的真子集中不存在码，候选码可以有多个。（<code>姓名</code>可以决定性别年龄身高，所以<code>姓名</code>是候选码，<code>学号</code>也可以决定性别年龄身高，所以也是候选码。<code>&#123;姓名，年龄&#125;</code>不是候选码，因为其真子集{<code>姓名</code>}是码）</p>
+</li>
+<li>
+<p>主码：主码就是熟悉的主键。<strong>主码是任意一个候选码</strong>。在建模过程中，建模人员从候选者中挑选一个候选码作为主码，这个主码就是主键。</p>
+</li>
+<li>
+<p>主属性：所有候选码的属性称为主属性。不包含在任何候选码中的属性称为<code>非主属性</code>或<code>非码属性</code>。（<code>学号</code>和<code>姓名</code>就是该关系的主属性，<code>年龄</code>和<code>性别</code>就是非主属性。）</p>
+</li>
+<li>
+<p>(部分)函数依赖：姓名可以决定学生宿舍，学号也可以决定学生宿舍，那说明学生宿舍部分依赖于学号+姓名。</p>
+</li>
+<li>
+<p>完全函数依赖：学号+课程可以决定分数，但学号不能单独决定分数，姓名不能决定分数。所以说明分数完全依赖于学号+课程。</p>
+<p><img src="1.png" alt="函数依赖" /></p>
+</li>
+</ul>
+<h3 id="第三范式3nf"><a class="markdownIt-Anchor" href="#第三范式3nf"></a> 第三范式（3NF）</h3>
+<p>在2NF基础上，任何非主属性不依赖于其它非主属性（在2NF基础上消除传递依赖）</p>
+<ul>
+<li>传递依赖：学号决定姓名，姓名决定性别、班级，班级决定班主任。但是，班主任不能反推决定班级(一个班主任不一定只负责一个班级)，班级不能反推姓名(一个班级有很多姓名)。所以说明班主任传递依赖于学号。</li>
+</ul>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<ul>
+<li>范式越高，冗余越少，数据越规范</li>
+<li>范式越高，越灵活，扩展性越强，使用成本越高</li>
+<li>ER模型是数据库设计的理论基础，<code>Bill Inmon</code> 提出使用 ER模型 构建数仓。</li>
+<li>对于ER模型，我们需要梳理清楚企业各个业务系统的实体，实体间的关系，实体的属性，它的实施周期长，而互联网行业是不断探索，不断迭代的过程，当你还没有梳理清楚的时候，业务就已经发生了改变，甚至当你的数仓还没建好的时候，有可能这个企业已经黄了。</li>
+</ul>
+<h2 id="维度建模"><a class="markdownIt-Anchor" href="#维度建模"></a> 维度建模</h2>
+<ul>
+<li>事实表：描述一个客观存在的事实的记录表。事实数据表。发生在现实世界中的操作型事件，其所产生的可度量数值，存储在事实表中。从最低的粒度级别来看，事实表行对应一个度量事件，反之亦然。通常是app埋点日志。</li>
+<li>维度表：每个维度表都包含单一的主键列。维度表的主键可以作为与之关联的任何事实表的外键，当然，维度表行的描述环境应与事实表行完全对应。 维度表通常比较宽，是扁平型非规范表，包含大量的低粒度的文本属性，维度表一般由代理键、自然键、维度属性三部分构成。<br />（相当于将事实表中的 <code>属性</code> 维度提取出来，和 <code>指标</code> 一起称为维表）</li>
+<li>维度：用于说明数据。维度是指可指定不同值的对象的<code>描述性属性</code>或<code>特征</code>。(杯子的颜色，材质)</li>
+<li>指标：用于衡量数据。指可以按<code>总数</code>或<code>比值</code>衡量的具体<code>维度元素</code>。(杯子的长度、体积、容积)。</li>
+<li>区别：维度不可衡量，指标一般可衡量，能说出具体是多少，而维度更倾向于文字性描述。（不知道这样理解对不对，好像下面那个城市的例子更准确）</li>
+</ul>
+<blockquote>
+<p>在维度建模中，通常将指标的度量称之为<code>事实</code>，将产生度量的环境称之为<code>维度</code>。将描述同一个业务实体的的多个维度列组合在一起，就是常说的<code>维度表</code>。</p>
+</blockquote>
+<blockquote>
+<p>虽然维度和指标可以独立使用，但常见的还是相互结合使用。维度和指标的值以及这些值之间的关系，使您的数据具有了意义。为了挖掘尽可能多的深层次信息，维度通常与一个或多个指标关联在一起。例如，维度<code>城市</code>可以与指标<code>人口</code>和<code>面积</code>相关联。有了这些数据，系统还可以创建“人口密度”等比值指标，带来有关这些城市的更详细的深入信息。</p>
+</blockquote>
+<hr />
+<blockquote>
+<p>数据库中，键和码是一个东西，就是叫法不同而已。除了上面提到的 码，候选码，主码 之外，还有以下几个。</p>
+</blockquote>
+<ul>
+<li>复合键：由两个或者多个属性组成的键。</li>
+<li>自然键：由现实世界中已经存在的属性组成的键。姓名，学号，身份证</li>
+<li>代理键：不具有业务含义的键</li>
+<li>备用键：也就是次键，是表中行的另一个唯一标识。</li>
+<li>外键：在一个实体类型中表示另一个实体类型的主键或者次键的一个或多个属性。</li>
+</ul>
+<h3 id="星型模型"><a class="markdownIt-Anchor" href="#星型模型"></a> 星型模型</h3>
+<ul>
+<li>
+<p>定义：由一个事实表和一组维度表组成，每个维表都有一个维度作为主键，事实表居中，多个维表呈辐射状分布于四周，并与事实表连接，形成一个星型结构。</p>
+<p><img src="2.png" alt="星型模型的表结构" /></p>
+</li>
+</ul>
+<h3 id="雪花模型"><a class="markdownIt-Anchor" href="#雪花模型"></a> 雪花模型</h3>
+<ul>
+<li>
+<p>在星型模型的基础上，基于范式理论进一步层次化，将某些维表扩展成事实表，最终形成雪花状结构。标准的星型模型维度只有一层，而雪花模型可能会涉及多级，<code>维度层级</code>是雪花模型与星型模型的主要区别。雪花模型比较接近3NF，但是无法完全遵循，因为遵循3NF的性能成本太高。</p>
+<p><img src="3.jpg" alt="雪花模型的表结构" /></p>
+</li>
+</ul>
+<h3 id="星座模型"><a class="markdownIt-Anchor" href="#星座模型"></a> 星座模型</h3>
+<ul>
+<li>
+<p>星座模型与前两种情况的区别是事实表的数量，星座模型是基于多个事实表。</p>
+</li>
+<li>
+<p>基本上是很多数据仓库的常态，因为很多数据仓库都是多个事实表。所以是否星座只反应是否有多个事实表，它们之间是否共享一些维度表。星座模型不和前两种模型冲突。</p>
+<p><img src="4.png" alt="星座模型的表结构" /></p>
+</li>
+</ul>
+<h3 id="建模步骤"><a class="markdownIt-Anchor" href="#建模步骤"></a> 建模步骤</h3>
+<h4 id="选择业务过程"><a class="markdownIt-Anchor" href="#选择业务过程"></a> 选择业务过程</h4>
+<ul>
+<li>选择感兴趣的业务线，业务过程通常的表示是业务执行的活动，与之相关的维度描述和每个业务过程事件关联的描述性环境。如下单，支付，退款，活动</li>
+<li>业务过程建立或获取关键性能度量。</li>
+</ul>
+<h4 id="声明粒度"><a class="markdownIt-Anchor" href="#声明粒度"></a> 声明粒度</h4>
+<ul>
+<li>粒度传递的是与事实表度量有关的细节级别。</li>
+<li>精确定义某个事实表的每一行表示什么。(一行代表一条订单？一天的订单？一周的订单)</li>
+<li>对事实表的粒度要达成共识。</li>
+</ul>
+<h4 id="确认维度"><a class="markdownIt-Anchor" href="#确认维度"></a> 确认维度</h4>
+<ul>
+<li>健壮的维度集合来粉饰事实表。(谁？什么时间？什么地点？)</li>
+<li>维度表示承担每个度量环境中所有可能的单值描述符。</li>
+</ul>
+<h4 id="确认事实"><a class="markdownIt-Anchor" href="#确认事实"></a> 确认事实</h4>
+<ul>
+<li>不同粒度的事实必须放在不同的事实表中。</li>
+<li>事实表的设计完全依赖物理活动，不受最终报表的影响。</li>
+<li>事实表通过外健关联与之相关的维度。</li>
+<li>查询操作主要是基于事实表开展计算和聚合。(度量值：如个数，件数，金额)</li>
+</ul>
+<h2 id="最后来个对比的表格"><a class="markdownIt-Anchor" href="#最后来个对比的表格"></a> 最后来个对比的表格</h2>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th>数据库</th>
+<th>数据仓库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面向</td>
+<td>事务(OLTP)</td>
+<td>分析/决策(OLAP)</td>
+</tr>
+<tr>
+<td>建模方式</td>
+<td>范式建模</td>
+<td>维度建模</td>
+</tr>
+<tr>
+<td>数据量</td>
+<td>小(GB)</td>
+<td>大(TB/PB)</td>
+</tr>
+<tr>
+<td>前期成本</td>
+<td>大</td>
+<td>小</td>
+</tr>
+<tr>
+<td>后期成本</td>
+<td>小</td>
+<td>大</td>
+</tr>
+<tr>
+<td>数据冗余度</td>
+<td>小</td>
+<td>大</td>
+</tr>
+<tr>
+<td>数据灵活度</td>
+<td>大</td>
+<td>小</td>
+</tr>
+<tr>
+<td>架构</td>
+<td>Inmon</td>
+<td>Kimball</td>
+</tr>
+<tr>
+<td>建模方向</td>
+<td>自上而下据源</td>
+<td>自下而上</td>
+</tr>
+<tr>
+<td>数据流向</td>
+<td>从数据源头头开始设计</td>
+<td>从数据指标开始</td>
+</tr>
+<tr>
+<td>表结构</td>
+<td>实体+属性+关系</td>
+<td>事实+维度</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>业务模式较固定</td>
+<td>业务变化较频繁</td>
+</tr>
+</tbody>
+</table>
+<p><img src="3.png" alt="区分" /></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/qa/">https://creazyboyone.github.io/qa/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/">数据建模</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/qa2/"><i class="fa fa-chevron-left">  </i><span>大数据（二）OneData方法论</span></a></div><div class="next-post pull-right"><a href="/spark3/"><span>Spark 深入学习(三)</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

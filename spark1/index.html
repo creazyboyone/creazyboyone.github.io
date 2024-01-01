@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Spark 深入学习(一)"><meta name="keywords" content="大数据,Spark,数据挖掘"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>Spark 深入学习(一) | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text"> 开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.1.</span> <span class="toc-text"> 目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text"> 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E7%9A%84%E8%A6%81%E5%BC%80%E5%A7%8B%E4%BA%86"><span class="toc-number">1.3.</span> <span class="toc-text"> 真的要开始了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.4.</span> <span class="toc-text"> 下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.5.</span> <span class="toc-text"> 基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spark%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text"> Spark的组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rdd%E5%BC%B9%E6%80%A7%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">1.7.</span> <span class="toc-text"> RDD(弹性分布式数据集)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E%E5%A4%A9%E8%AE%A1%E5%88%92"><span class="toc-number">1.8.</span> <span class="toc-text"> 明天计划</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Spark 深入学习(一)</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-12-01</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/">技术栈</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E5%A4%A7%E6%95%B0%E6%8D%AE/Spark/">Spark</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="开始"><a class="markdownIt-Anchor" href="#开始"></a> 开始</h1>
+<blockquote>
+<p>这段时间真的是忙，但大多数是自己给自己加戏，但是呢？感觉也没多少进步，一会想刷题，一会想看书，一会想娱乐…<br />
+最后一事无成，惭愧惭愧。<br />
+所以，想找一个时机，专注于学一样东西，Spark是不二之选。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="目标"><a class="markdownIt-Anchor" href="#目标"></a> 目标</h2>
+<p>选择 <code>Spark</code> 的原因是，它是目前我最经常使用的工具。但是呢，目前对它的使用仅限于 <code>pyspark</code>，<code>SparkSQL</code>，<code>Spark on Yarn</code>，越深入使用，越对这个框架赞不绝口。把原本龟速的 <code>MapReduce</code> 和 <code>hive</code> 甩飞两条街，以及对计算机内存的合理运用，有效减少了很多 <code>OOM</code> 和 <code>StackOverflow</code> 使得我完成了很多“不可思议”的壮举。这次是想深入了解原理性的东西（RDD）以及更多函数式编程的思想和内置数学计算函数。最后能够达到使用时随心所欲吧，或许学到一半转Flink了哈哈哈哈。</p>
+<h2 id="方法"><a class="markdownIt-Anchor" href="#方法"></a> 方法</h2>
+<p>以官方文档为脉络，从头走到尾。个别酌情跳过。其余不懂的地方大概按这个顺序作为参考或者了解细节</p>
+<ol>
+<li>官方文档</li>
+<li>看别人博客</li>
+<li>源码解析教程</li>
+<li>源码</li>
+<li>Spark论文</li>
+</ol>
+<h2 id="真的要开始了"><a class="markdownIt-Anchor" href="#真的要开始了"></a> 真的要开始了</h2>
+<p>确定一下版本。故意安装不同的版本有助于对比个别更新。</p>
+<ol>
+<li>单机版：Spark 3.0.1</li>
+<li>集群版：2.4.0-cdh6.2.1</li>
+</ol>
+<h2 id="下载"><a class="markdownIt-Anchor" href="#下载"></a> 下载</h2>
+<p>官网下载: <a href="http://spark.apache.org/downloads.html">http://spark.apache.org/downloads.html</a></p>
+<h2 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h2>
+<ol>
+<li>Spark : 实现快速通用的集群计算平台</li>
+<li>基于MapReduce的计算引擎通常会将中间结果输出到磁盘上，进行存储和容错。而Spark是基于内存的计算，大部分的计算依赖于内存和缓存。所以速度会快。</li>
+<li>能快速融入 <code>Hadoop</code> 大数据生态系统，函数的名称、数据类型又接近或相同于<code>python</code>的数据分析包 <code>Pandas</code> 和 <code>numpy</code>。学习成本超级无敌低。</li>
+<li>有极强的语言兼容性，Scala是默认的编程语言，Java无缝支持(都是基于<code>JVM</code>)。另外支持 <code>python</code>(pyspark)，R (SparkR)</li>
+<li>有极强的场景兼容性：Spark几乎贯穿了大数据的各种场合，大数据分析、挖掘、批处理、实时查询、流处理、图计算、机器学习。（几乎和 Java后端 的Spring全家桶一样了）</li>
+<li>有极强的平台兼容性：除了兼容 <code>Hadoop</code> 大数据生态，还可以单机运行，运行在 <code>Mesos</code> 里面，运行在 <code>k8s</code> 里面…</li>
+<li>机器学习，兼容（tensorflow）（pytorch）还有自己实现的常用机器学习算法库…</li>
+<li>没了，想想别人要买多贵多贵的显卡去跑 <code>ML</code>，而我只需要把 tf 代码丢集群跑分布式，而且速度一点也不慢就激动地睡不着。</li>
+</ol>
+<h2 id="spark的组件"><a class="markdownIt-Anchor" href="#spark的组件"></a> Spark的组件</h2>
+<p><img src="1.jpg" alt="盗来的图23333" /></p>
+<ol>
+<li>SparkCore：将分布式数据抽象为弹性分布式数据集（RDD），实现了应用任务调度、RPC、序列化和压缩，并为运行在其上的上层组件提供API。</li>
+<li>SparkSQL：Spark Sql 是Spark来操作结构化数据的程序包，可以让我使用SQL语句的方式来查询数据，Spark支持多种数据源，包含Hive表、parquest、text文本、csv以及JSON等内容。</li>
+<li>SparkStreaming： 是Spark提供的实时数据进行流式计算的组件。(<code>Impala</code>、<code>presto</code>、<code>ClickHouse</code> 比它快，但可做参考，优点是可以插入删除，而前两个只能查询)</li>
+<li>MLlib：提供常用机器学习算法的实现库。</li>
+<li>GraphX：提供一个分布式图计算框架，能高效进行图计算。</li>
+<li>BlinkDB：用于在海量数据上进行交互式SQL的近似查询引擎。</li>
+<li>Tachyon：以内存为中心高容错的的分布式文件系统。(用不到, 应该可以当做内存型<code>HDFS</code>)</li>
+</ol>
+<h2 id="rdd弹性分布式数据集"><a class="markdownIt-Anchor" href="#rdd弹性分布式数据集"></a> RDD(弹性分布式数据集)</h2>
+<ol>
+<li>RDD是Spark的核心数据模型，但是个抽象类，全称为<code>Resillient Distributed Dataset</code>，即弹性分布式数据集。</li>
+<li>RDD在抽象上来说是一种元素集合，包含了数据。它是被分区的，分为多个分区，每个分区分布在集群中的不同节点上，从而让RDD中的数据可以被并行操作。(每个分区分配一个线程，多线程同时写入多个文件。并不是多线程同时写入一个文件)</li>
+<li>RDD通常通过<code>Hadoop</code>上的文件，即<code>HDFS</code>文件或者<code>Hive</code>表，来进行创建；有时也可以通过应用程序中的集合来创建。(废话)</li>
+<li>RDD最重要的特性就是，提供了容错性，可以自动从节点失败中恢复过来（极其重要，它能使不稳定的低配的计算节点从计算超时或者网络传输超时中恢复过来并继续计算而不崩溃或者写入部分数据导致数据出现重复或缺失）。即如果某个节点上的RDD Partition，因为节点故障，导致数据丢了，那么RDD会自动通过自己的数据来源重新计算该partition。这一切对使用者是透明的。</li>
+<li>RDD的数据默认情况下存放在内存中的，但是在内存资源不足时，Spark会自动将RDD数据写入磁盘。（弹性）</li>
+</ol>
+<h2 id="明天计划"><a class="markdownIt-Anchor" href="#明天计划"></a> 明天计划</h2>
+<ol>
+<li>在开始啃官方文档前，用一天扫一遍Spark的专业术语。</li>
+<li>学习时，没有统一规划知识结构。先以笔记形式记录，学到哪记到哪。等Spark专题完成后（不会吧不会吧不可能吧？？？如果能专心啃完，就就奖励自己一台MacBook Air M2）再来一次整理知识点~</li>
+<li>内容会随时修改更新，错别字请指出~</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/spark1/">https://creazyboyone.github.io/spark1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a><a class="post-meta__tags" href="/tags/Spark/">Spark</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/spark2/"><i class="fa fa-chevron-left">  </i><span>Spark 深入学习(二)</span></a></div><div class="next-post pull-right"><a href="/AliyunTianci03/"><span>阿里云天池Python(三)</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

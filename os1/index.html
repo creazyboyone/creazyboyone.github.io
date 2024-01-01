@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="操作系统(一)"><meta name="keywords" content="操作系统,Rust,K210"><meta name="author" content="Shengyaqingfeng"><meta name="copyright" content="Shengyaqingfeng"><title>操作系统(一) | Shengyaqingfeng's Blog</title><link rel="shortcut icon" href="/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '7.0.0'
+} </script><meta name="generator" content="Hexo 7.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text"> 开始</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%83%B3%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text"> 想法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%87%86%E5%A4%87"><span class="toc-number">3.</span> <span class="toc-text"> 环境搭建准备</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#qemu"><span class="toc-number">3.1.</span> <span class="toc-text"> Qemu:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rust"><span class="toc-number">3.2.</span> <span class="toc-text"> Rust</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B-2"><span class="toc-number">4.</span> <span class="toc-text"> 开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#rcore"><span class="toc-number">4.1.</span> <span class="toc-text"> rCore</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%BC%80%E5%A7%8B"><span class="toc-number">5.</span> <span class="toc-text"> 真正的开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%85%A7%E7%9D%80%E6%95%99%E7%A8%8B%E4%B8%80%E6%AD%A5%E6%AD%A5%E5%AE%8C%E6%88%90%E4%BA%86"><span class="toc-number">5.1.</span> <span class="toc-text"> 照着教程一步步完成了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E5%92%8C%E9%A2%9C%E8%89%B2"><span class="toc-number">5.2.</span> <span class="toc-text"> 输出和颜色</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/avatar.png"></div><div class="author-info__name text-center">Shengyaqingfeng</div><div class="author-info__description text-center">The blog share Algorithm JavaWeb Spring Docker k8s BigData Hadoop Machine Learning by Shengyaqingfeng...</div><div class="follow-button"><a href="https://github.com/creazyboyone">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">65</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">72</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">32</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://5566.net/">Test</a><a class="author-info-links__name text-center" href="https://www.baidu.com/">Baidu</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Shengyaqingfeng's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">操作系统(一)</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-04-30</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/">技术栈</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="开始"><a class="markdownIt-Anchor" href="#开始"></a> 开始</h1>
+<blockquote>
+<p>事情从某一个深夜刷 Bilibili 说起。那天晚上，想起过年从家里带上来的 1GB SD 卡，用来完成 K210 系列的最后一课：录音并保存文件到 SD 卡和播放录音的功能，于是将最后一课的代码编译，烧录一气呵成。然后运行发现，sd card init fail…</p>
+</blockquote>
+<span id="more"></span>
+<p>一开始怀疑是 SD 卡文件格式有问题，然后格式化了好几次，分别都尝试了<code>fat</code>, <code>fat32</code>, <code>ntfs</code>, <code>exfat</code>，还是不行。迫不得已，跑去看源码，发现只支持<code>fat32</code>。于是重新又格式化了一遍，结果还是失败。都不能挂载到开发板里面。无奈只能查查其他开发板有没有这种问题，结果都是和容量有关（1GB、2GB、4GB不行，16GB可以）。</p>
+<p>这根本不科学。。。我只坚信能不能识别 SD 卡和文件格式有关要么和卡的工作原理或者协议有关。和容量没半毛钱关系。但又不想深究挂载 SD 卡的原理和识别卡的原理。结果就是放弃。。。</p>
+<p>故事到这，原本就该结束了。但是，我还是不甘心放下，躺在被窝里在 B 站搜着 k210. 直到看见一个视频。。。<a href="https://www.bilibili.com/video/BV1nr4y1r7hw">用稚晖君推荐的K210开发板启动rCore操作系统吧</a>。</p>
+<p>WOC，WOC。这算是我的一个埋在我心中几年的想法啊！！！刚刚买到手中时，就刷到一个文章，有西数大佬将 risc-v 适配 linux 的驱动提交到 linux 内核的仓库中，意味着 linux 系统可以安装在 k210 上啊。不出所料，文章就提到有人已经将 linux 0.11 迁移到 k210 上面了。于是我才萌生在这块开发板中搞个简单系统玩玩。</p>
+<blockquote>
+<p>[后记] 看的是那种新闻文章，一开始并不知道是谁，后面发现好像是国人 Li Zhirui。</p>
+</blockquote>
+<ol>
+<li>他用的是 <code>Sipeed Maix</code> 开发板 <a href="https://en.bbs.sipeed.com/t/topic/1798">K210 run linux 0.11</a>，<a href="https://github.com/yuan-xy/Linux-0.11/">源码在这</a></li>
+<li>后面西数的工程师 Damien Le Moal 又移植了 <a href="https://lpc.events/event/4/contributions/386/attachments/298/502/RISC-V-NOMMU-Linux-Plumbers-2019.pdf">Linux 5.1.0</a></li>
+<li>后面陆续有人移植了 <a href="https://en.bbs.sipeed.com/t/topic/1863/2">Linux 5.6.0</a>, <a href="https://dl.sipeed.com/shareURL/MAIX/K210_Linux/Firmware">镜像在这</a> 尝试了一下，<code>Maix</code> 的镜像，跑在 <code>K210</code> 好像有bug。</li>
+<li><a href="https://github.com/damien-lemoal/riscv64-nommu-buildroot">Linux 5.8.0 源码</a>，需要自己编译</li>
+</ol>
+<p>第一个想法就是 linux 系统。不过 linux 系统还是太庞大了。所以看完视频后，就打算跟着 up 学操作系统，顺便还学了<code>rCore</code>, <code>Rust</code>。顺便还实现了自己的想法，就非常的 nice。于是，这个系列的坑，开始了~ （工作繁忙，随时搁置 or 放弃hhhh）</p>
+<h1 id="想法"><a class="markdownIt-Anchor" href="#想法"></a> 想法</h1>
+<blockquote>
+<p>rCore 需要 Ubuntu 开发环境，刚好我又有云服务器。其实 Rust 在 Windows 也可以的，就怕系统差异会导致其他问题，还是尽量保持一致吧~</p>
+</blockquote>
+<p>反正代码不用开发，直接复制就行，就在 Ubuntu 里面搞算了，编译出来后，再拿到本地烧录到开发板上面跑。</p>
+<h1 id="环境搭建准备"><a class="markdownIt-Anchor" href="#环境搭建准备"></a> 环境搭建准备</h1>
+<h2 id="qemu"><a class="markdownIt-Anchor" href="#qemu"></a> Qemu:</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apt-get install pkg-config</span><br><span class="line">apt-get install libglib2.0-dev</span><br><span class="line">apt-get install libpixman-1-dev</span><br><span class="line"><span class="comment"># 下载源码包 （如果下载速度过慢可以把地址替换为我们提供的地址：http://42.194.184.212:5212/#/s/4dHZ）</span></span><br><span class="line">wget https://download.qemu.org/qemu-5.0.0.tar.xz</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar xvJf qemu-5.0.0.tar.xz</span><br><span class="line"><span class="comment"># 编译安装并配置 RISC-V 支持</span></span><br><span class="line"><span class="built_in">cd</span> qemu-5.0.0</span><br><span class="line">./configure --target-list=riscv32-softmmu,riscv64-softmmu</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<h2 id="rust"><a class="markdownIt-Anchor" href="#rust"></a> Rust</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line"><span class="built_in">export</span> RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line">curl https://sh.rustup.rs -sSf | sh</span><br><span class="line"><span class="comment"># 直接回车安装，然后环境变量</span></span><br><span class="line"><span class="built_in">source</span> <span class="variable">$HOME</span>/.cargo/env</span><br><span class="line"><span class="comment"># 工具链</span></span><br><span class="line">rustc --version</span><br><span class="line"><span class="comment"># 修改镜像源 ~/.cargo/config</span></span><br><span class="line">[source.crates-io]</span><br><span class="line">registry = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line">replace-with = <span class="string">&#x27;ustc&#x27;</span></span><br><span class="line">[source.ustc]</span><br><span class="line">registry = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br></pre></td></tr></table></figure>
+<h1 id="开始-2"><a class="markdownIt-Anchor" href="#开始-2"></a> 开始</h1>
+<h2 id="rcore"><a class="markdownIt-Anchor" href="#rcore"></a> rCore</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 克隆项目仓库</span><br><span class="line">git clone https://gitee.com/mirrors/rCore.git</span><br><span class="line">git clone https://github.com/rcore-os/rCore-Tutorial</span><br></pre></td></tr></table></figure>
+<p>然后就按照教程</p>
+<ul>
+<li><a href="https://rcore-os.github.io/rCore_tutorial_doc/">rCore_tutorial_doc</a></li>
+<li><a href="https://rcore-os.github.io/rCore-Tutorial-deploy/">rCore_tutorial_deploy</a></li>
+</ul>
+<p>这俩文档，不能说类似。。。只能说一模一样。仔细看吧，又有些许不一样。而且这期间，我两个文档混着看，导致踩了不少 <code>Rust cargo</code> 版本、环境、编译工具链的坑。</p>
+<p>一直走到了 <strong>使用QEMU运行内核</strong> 打印 “ok”，然而此时比没有意识到有啥问题。。。</p>
+<p>在这之前，都是用的教程的 qemu 模拟运行，既然能开始引导到内核执行 <code>Rust_main</code> 了，那肯定得去 k210 跑跑。</p>
+<p>make build 生成镜像bin，烧录进 k210 一气呵成。然后失败。。。</p>
+<hr />
+<p>中间过了好久，期间还去看了两集 mit6s.081，最终以啃不动生肉而放弃QAQ</p>
+<hr />
+<p>此时，才懵懵懂懂中，clone 下了 rCore-Tutorial-v3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 克隆项目仓库</span><br><span class="line">git clone https://github.com/rcore-os/rCore-Tutorial-v3.git</span><br></pre></td></tr></table></figure>
+<p>此时，项目的 <code>bootloader</code> 切换为 <code>rustsbi</code>。Rust 的依赖和包版本更新到了2022年的版本。才消除了一些不兼容的警告如：<code>llvm_asm</code>、<code>asm</code>。又是一通 make build 后，生成镜像烧录，成功！！！激动的心，颤抖的手 ٩(๑&gt;◡&lt;๑)۶</p>
+<p><img src="helloword.png" alt="第一次在K210上运行操作系统" /></p>
+<p>心情平静一点点后，才发现，之前用的是 <code>OpenSBI</code> + <code>QEMU</code>，现在变成 <code>RustSBI</code> + <code>k210</code>。接下来，花了一堆时间，开始搞清楚两个 <code>SBI</code> 关系。</p>
+<hr />
+<p>中间过了好久，期间尝试了好多东西</p>
+<ol>
+<li><code>RustSBI</code> + <code>QEMU</code> 成功</li>
+<li><code>os.bin</code> + <code>k210</code> 失败，没有 bootloader</li>
+<li><code>qemu5.0.0/pc-bios/opensbi-riscv64-virt-fw_jump.bin</code> + <code>os.bin</code> + <code>QEMU</code> 成功</li>
+<li><code>qemu5.0.0/pc-bios/opensbi-riscv64-virt-fw_jump.bin</code> + <code>os.bin</code> + <code>k210</code> 失败</li>
+<li>下载仓库 <code>opensbi</code> 自己编译成功（这里还被riscv编译链折腾了好久） + <code>os.bin</code> + <code>k210</code> 运行失败</li>
+<li>下载仓库 <code>opensbi</code> 的 release + <code>os.bin</code> + <code>k210</code> 运行失败（应该是需要魔改或者降低到 0.3 才能成功。）</li>
+<li>用 <code>hexdump</code> 对比 <code>rustsbi</code> 和 <code>opensbi</code> 的二进制 bin 文件，没有啥发现。</li>
+<li>查看 rCore-Tutorial-v3 的Makeflie代码，搞清楚了 <code>RustSBI</code> 和 <code>os.bin</code> 的关系。用 <code>hexdump</code> 查看合并后的 bin。（巨大的进展）</li>
+<li>下载仓库 <code>rustsbi</code>, 忘了有没有编译运行了</li>
+<li>下载仓库 <code>rustsbi-k210</code>, 发现更新了 0.2.0 版本，尝试编译，编译成功。</li>
+<li>用 <code>rustsbi-k210-v2</code> + <code>os.bin</code> + <code>k210</code> 成功！</li>
+</ol>
+<hr />
+<p>终于可以真正开始了。</p>
+<h1 id="真正的开始"><a class="markdownIt-Anchor" href="#真正的开始"></a> 真正的开始</h1>
+<p>在前面胡乱尝试的差不多后，终于从头开始阅读 v3 文档。补充了好多基础</p>
+<ol>
+<li>ABI -&gt; Application Binary Interface 和 API<br />
+<img src="os.png" alt="盗图" /></li>
+<li>异常控制流（指令跳转）
+<ol>
+<li>中断（时钟中断、控制台中断等。外设中断）</li>
+<li>异常（应用级别的程序异常）</li>
+<li>陷入（系统调用 syscall, retn）</li>
+</ol>
+</li>
+<li>进程上下文切换（CPU时间片）、内存地址空间映射</li>
+<li>程序内存布局和编译链接过程（符号替换，内存地址布局重置，符号重定位）</li>
+<li>Qemu 启动流程（）
+<ol>
+<li>0x1000</li>
+<li>0x80000000 (bootloader, bios)</li>
+<li>0x80200000 (os)<br />
+<img src="MemoryLayout.png" alt="内存分布" /><br />
+<img src="link-sections.png" alt="链接器链接sections" /></li>
+</ol>
+</li>
+<li>被调用者保存(Callee-Saved) 寄存器、调用者保存(Caller-Saved) 寄存器，保存在栈中。<code>sp</code> 是一个被调用者保存寄存器。<br />
+<img src="CallStack.png" alt="调用栈" /><br />
+<img src="StackFrame.png" alt="栈帧分布" /></li>
+</ol>
+<h2 id="照着教程一步步完成了"><a class="markdownIt-Anchor" href="#照着教程一步步完成了"></a> 照着教程一步步完成了</h2>
+<p>这里搞清楚了 <code>Makefile</code> 文件的编写，方便了一大坨，后面只需要修改代码，然后<code>make run</code>，把镜像拉出来烧录就OK了。主要分为几步：</p>
+<ol>
+<li>去掉有关 <code>QEMU</code> 的命令，永久使用真机 <code>k210</code></li>
+<li>调为永久 release</li>
+<li>加了点输出信息，能更加分清不同阶段(make run env clean build kernel merge)做的事情</li>
+<li>其中merge 阶段负责 <code>dd</code>，这样方便多了。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> os/target/riscv64imac-unknown-none-elf/debug/kernel.bin .</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=kernel.bin of=rustsbi-k210-v2.bin bs=131072 seek=1</span><br></pre></td></tr></table></figure>
+<p><img src="make.png" alt="完美" /></p>
+<h2 id="输出和颜色"><a class="markdownIt-Anchor" href="#输出和颜色"></a> 输出和颜色</h2>
+<p>最后就简单啦~ 调用SBI打印字符串。没啥难度。</p>
+<p>后面有点意思的是自己摸索出打印日志，就还挺OK！</p>
+<p>贴个成功的图，第一章完结</p>
+<p><img src="over.png" alt="OVER" /></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Shengyaqingfeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://creazyboyone.github.io/os1/">https://creazyboyone.github.io/os1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://creazyboyone.github.io">Shengyaqingfeng's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><a class="post-meta__tags" href="/tags/Rust/">Rust</a><a class="post-meta__tags" href="/tags/K210/">K210</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/projectsCollect/"><i class="fa fa-chevron-left">  </i><span>旧项目整理</span></a></div><div class="next-post pull-right"><a href="/LittleMind2/"><span>关于元宇宙的一点点猜想</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'd30854af2bc52afe7d52',
+  clientSecret: '1518508fb9a8cce4b67b90626ca6ea91beb853b5',
+  repo: 'Gittalk-Discuss',
+  owner: 'creazyboyone',
+  admin: 'creazyboyone',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2024 By Shengyaqingfeng</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
